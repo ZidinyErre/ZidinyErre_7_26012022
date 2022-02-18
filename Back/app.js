@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 
+
 const app = express();
 
 const db = mysql.createConnection({
@@ -9,6 +10,7 @@ const db = mysql.createConnection({
     password: "2525,pasM!",
     database: "groupomania"
 });
+
 
 db.connect((err) =>{
     if(err){
