@@ -25,22 +25,41 @@ const dotenv = require('dotenv');
 //     });
 // };
 
+// exports.signup = (req, res, next) => {
+//     const user = req.body
+//     bcrypt.hash(user.password,10)
+//     .then((hash) => {
+//         user.password = hash
+//         db.query(`INSERT INTO user SET (nom,prenom,email,password,service,role) VALUES (?,?,?,?,?,?) `, [nom,prenom,email,password,service,role], (err,res) =>{
+//             if(err) {
+//                 console.log(err);
+//                 return res.status(400).json("erreur");
+//             }
+//             return res.status(201).json({message : 'Profil créé !'});
+//         });
+        
+//     });
+
+// };
 exports.signup = (req, res, next) => {
-    const user = req.body
-    bcrypt.hash(user.password,10)
-    .then((hash) => {
-        user.password = hash
-        db.query("INSERT INTO user SET ?", user, (err,res) =>{
+        db.query(`INSERT INTO user SET (nom,prenom,email,password,service,role) VALUES (?,?,?,?,?,?) `, [nom,prenom,email,password,service,role], (err,res) =>{
             if(err) {
                 console.log(err);
-                return res.status(400).json("erreur");
             }
-            return res.status(201).json({message : 'Profil créé !'});
+            else{
+                res.send( 'Profil créé !');
+            } 
         });
-        
-    });
-
 };
+
+// exports.signup = (req, res, next) => {
+    
+//     db.query(`INSERT INTO user SET (nom,prenom,email,password,service,role) VALUES (?,?,?,?,?,?) `, [nom,prenom,email,password,service,role]) 
+//         .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+//         .catch(error => res.status(500).json({error: 'Echec de l\'inscription !'}))
+    
+
+// };
 
 exports.login = (req, res, next) => {
 
