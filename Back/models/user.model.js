@@ -5,27 +5,58 @@ const dotenv = require('dotenv');
 const { USER } = require("../config/db.config");
 
 
-exports.signup = (req, res, next) => {
-    const {nom, prenom, email, password, service, role} = req.body
-    const sql = `INSERT INTO user (nom, prenom, email, password, service, role) VALUES (?,?,?,?,?,?)`
-
-    bcrypt.hash(req.body.password, 10)
-        .then((hash) => {
-            req.password = hash
-            db.query( sql, [nom,prenom,email,password,service,role], (err, result) =>{
-                if(err) {
-                    console.log(err);
-                    return res.status(400).json({error: 'Utilisateur non sauvegardé '})
-                }
-                else{
-                    console.log(result);
-                    return res.status(201).json({message : 'Profil créé !'})
-                } 
-            });
-        })
-        .catch(error => res.status(500).json({error: 'Echec de l\'inscription !'}));
+exports.signup = async(req, res, next) => {
+        
+    try{
+        const {nom, prenom, email, password, service, role} = req.body;
+        const hash = await bcrypt.hash(password,10);
+        await db('user').insert({nom: nom, prenom: prenom, email: email, hash: hash, service: service, role: role});
+        return res.status(201).json({message : 'Profil créé !'})
+    }catch(e){
+        console.log(e);
+        return res.status(400).json({error: 'Utilisateur non sauvegardé '})
+        
+    }
         
 };
+
+// exports.signup = (req, res, next) => {
+// const {nom, prenom, email, password, service, role} = req.body
+// const sql = `INSERT INTO user (nom, prenom, email, password, service, role) VALUES (?,?,?,?,?,?)`
+
+//     db.query( sql, [nom,prenom,email,password,service,role], (err, result) =>{
+//         if(err) {
+//             console.log(err);
+//         }
+//         else{
+//             res.send( 'Profil créé !');
+//             console.log(result);
+
+//         } 
+//     });
+// };
+
+
+// exports.signup = (req, res, next) => {
+//     const user = req.body
+//     const sql = `INSERT INTO user (nom, prenom, email, password, service, role) VALUES (?,?,?,?,?,?)`
+//     const password = req.body.password;
+//     bcrypt.hash(password, 10)
+//         .then((hash) => {
+//             password = hash
+//             db.query( sql, user, (err, result) =>{
+//                 if(err) {
+//                     console.log(err);
+//                     return res.status(400).json({error: 'Utilisateur non sauvegardé '})
+//                 }
+//                 else{
+//                     console.log(result);
+//                     return res.status(201).json({message : 'Profil créé !'})
+//                 } 
+//             });
+//         })
+        
+// };
 
 
 
