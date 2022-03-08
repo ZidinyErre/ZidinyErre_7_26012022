@@ -2,41 +2,77 @@ const db = require("../models/db");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
-const User = require('../models/User');
+const User = require('../models/user');
 
-// exports.signup = async(req, res, next) => {
+exports.signup = async(params) => {
+
+    if (await db.User.findOne({ where: { email: params.email} })) {
+        throw 'l\'email' + params.email + 'existe déjà';
+    }
+    const user = new db.User(params);
+    
+    user.passwordHash = await bcrypt.hash(params.password, 10);
+    
+    await user.save();
+
+    console.log(user);
+
+
         
-//     try{
-//         const {nom, prenom, email, password, service, role} = req.body;
-//         const hash = await bcrypt.hash(password,10);
-//         await db('user').insert({nom: nom, prenom: prenom, email: email, hash: hash, service: service, role: role});
-//         return res.status(201).json({message : 'Profil créé !'})
-//     }catch(e){
-//         console.log(e);
-//         return res.status(400).json({error: 'Utilisateur non sauvegardé '})
+    // try{
+    //     const {nom, prenom, email, password, service, role} = req.body;
+    //     const hash = await bcrypt.hash(password,10);
+    //     await db('user').insert({nom: nom, prenom: prenom, email: email, hash: hash, service: service, role: role});
+    //     return res.status(201).json({message : 'Profil créé !'})
+    // }catch(e){
+    //     console.log(e);
+    //     return res.status(400).json({error: 'Utilisateur non sauvegardé '})
         
-//     }
+    // }
         
-// };
+};
 
-exports.signup = async(req, res, next) => {
+// exports.signup = (req, res, next) => {
 
-    const user = new User(nom, prenom, email, password, service, role);
+//         bcrypt.hash(req.body.password,10)
+//             .then( hash => {
+//                 db.query( (err,result) =>{
+//                 const user = new User({
+//                     nom: req.body.nom, 
+//                     prenom: req.body.prenom,
+//                     email: req.body.email,
+//                     password: hash, 
+//                     service: req.body.nom,
+//                     role: req.body.nom
+//                 });
+//                 if(err) {
+//                             console.log(err);
+//                         }
+//                         else{
+//                             res.send( 'Profil créé !');
+//                             console.log(result);
+                
+//                         } 
+//             });
+        
+//             })
+//             .catch(error => res.status(500).json({error: 'Echec de l\'inscription !'}));
 
-    db.query( user, (err, result) =>{
-        if(err) {
-            console.log(err);
-        }
-        else{
-            res.send( 'Profil créé !');
-            console.log(result);
 
-        } 
-    });
+//     // db.query( user, (err, result) =>{
+//     //     if(err) {
+//     //         console.log(err);
+//     //     }
+//     //     else{
+//     //         res.send( 'Profil créé !');
+//     //         console.log(result);
+
+//     //     } 
+//     // });
     
         
         
-};
+// };
 
 // exports.signup = (req, res, next) => {
 // const {nom, prenom, email, password, service, role} = req.body
