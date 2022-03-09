@@ -4,18 +4,35 @@ const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 const User = require('../models/user');
 
-exports.signup = async(params) => {
-
-    if (await db.User.findOne({ where: { email: params.email} })) {
-        throw 'l\'email' + params.email + 'existe déjà';
-    }
-    const user = new db.User(params);
+exports.signup = async (req, res, next) => {
+    const {nom, prenom, email, password, service, role} = req.body;
+    let hashedPassword = await bcrypt.hash(password,10);
+    console.log(hashedPassword);
+        db.query( 'INSERT INTO user SET ?', {nom : nom, prenom : prenom, email : email, password : hashedPassword, service : service, role : role}, (err, result) =>{
+            if(err) {
+                res.status(400).json({error: 'Utilisateur non sauvegardé ! L email est probablement déjà utilisé!'});
+                console.log(err);
+            }
+            else{
+                res.status(201).json({ message: 'Utilisateur créé !' });
+                console.log(result);
     
-    user.passwordHash = await bcrypt.hash(params.password, 10);
-    
-    await user.save();
+            } 
+        });
+};
 
-    console.log(user);
+// exports.signup = async(req, res) => {
+
+    // if (await db.User.findOne({ where: { email: params.email} })) {
+    //     throw 'l\'email' + params.email + 'existe déjà';
+    // }
+    // const user = new db.User(params);
+    
+    // user.passwordHash = await bcrypt.hash(params.password, 10);
+    
+    // await user.save();
+
+    // console.log(user);
 
 
         
@@ -30,7 +47,7 @@ exports.signup = async(params) => {
         
     // }
         
-};
+// };
 
 // exports.signup = (req, res, next) => {
 

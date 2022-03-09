@@ -4,4 +4,4 @@ const userCtrl = require('../controllers/user');
 
 router.post('/signup', userCtrl.signup);
 
-module.exports = router;
+module.exports = router; 
