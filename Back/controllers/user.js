@@ -1,7 +1,7 @@
 const db = require("../models/db");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const dotenv = require('dotenv');
+require('dotenv').config();
 
 exports.signup = async (req, res, next) => {
     const {nom, prenom, email, password, service, role} = req.body;
@@ -51,8 +51,8 @@ exports.signup = async (req, res, next) => {
 // };
 
 exports.login = (req, res) => {
-    // const {email,password} = req.body;
-    db.query('SELECT * FROM user WHERE email = ${db.escape(req.body.email)};', (err, result) =>{
+    const {email,password} = req.body;
+    db.query('SELECT * FROM user WHERE email = ?', [email],  (err, result) =>{
         if(err){
             res.status(500).json({error: 'Echec de l\'opération'});
             console.log(err);
@@ -61,7 +61,7 @@ exports.login = (req, res) => {
             res.status(400).json({error: 'Email introuvable!'});
 
         }
-        bcrypt.compare(req.body.password, result[0]['password'], (bErr, bResult) => {
+        bcrypt.compare(password, result[0]['password'], (bErr, bResult) => {
             if(bErr){
                 res.status(500).json({error: 'Echec de l\'opération lié au mots de passe'});
                 console.log(bErr);
