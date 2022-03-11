@@ -20,7 +20,7 @@ app.options('/*', (_, res) => {
 app.use(express.urlencoded({ extended : true}));
 app.use(express.json());
  
-app.use('/api/', userRoutes);
+app.use('/api/auth', userRoutes);
 
 //app.get('/createdb', (req, res) => {
 //    let sql = 'CREATE DATABASE groupomania';

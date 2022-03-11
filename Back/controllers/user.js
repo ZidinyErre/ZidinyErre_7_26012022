@@ -2,7 +2,6 @@ const db = require("../models/db");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
-const User = require('../models/user');
 
 exports.signup = async (req, res, next) => {
     const {nom, prenom, email, password, service, role} = req.body;
@@ -21,123 +20,71 @@ exports.signup = async (req, res, next) => {
         });
 };
 
-// exports.signup = async(req, res) => {
 
-    // if (await db.User.findOne({ where: { email: params.email} })) {
-    //     throw 'l\'email' + params.email + 'existe déjà';
-    // }
-    // const user = new db.User(params);
-    
-    // user.passwordHash = await bcrypt.hash(params.password, 10);
-    
-    // await user.save();
-
-    // console.log(user);
-
-
-        
-    // try{
-    //     const {nom, prenom, email, password, service, role} = req.body;
-    //     const hash = await bcrypt.hash(password,10);
-    //     await db('user').insert({nom: nom, prenom: prenom, email: email, hash: hash, service: service, role: role});
-    //     return res.status(201).json({message : 'Profil créé !'})
-    // }catch(e){
-    //     console.log(e);
-    //     return res.status(400).json({error: 'Utilisateur non sauvegardé '})
-        
-    // }
-        
-// };
-
-// exports.signup = (req, res, next) => {
-
-//         bcrypt.hash(req.body.password,10)
-//             .then( hash => {
-//                 db.query( (err,result) =>{
-//                 const user = new User({
-//                     nom: req.body.nom, 
-//                     prenom: req.body.prenom,
-//                     email: req.body.email,
-//                     password: hash, 
-//                     service: req.body.nom,
-//                     role: req.body.nom
-//                 });
-//                 if(err) {
-//                             console.log(err);
-//                         }
-//                         else{
-//                             res.send( 'Profil créé !');
-//                             console.log(result);
-                
-//                         } 
-//             });
-        
-//             })
-//             .catch(error => res.status(500).json({error: 'Echec de l\'inscription !'}));
-
-
-//     // db.query( user, (err, result) =>{
-//     //     if(err) {
-//     //         console.log(err);
-//     //     }
-//     //     else{
-//     //         res.send( 'Profil créé !');
-//     //         console.log(result);
-
-//     //     } 
-//     // });
-    
-        
-        
-// };
-
-// exports.signup = (req, res, next) => {
-// const {nom, prenom, email, password, service, role} = req.body
-// const sql = `INSERT INTO user (nom, prenom, email, password, service, role) VALUES (?,?,?,?,?,?)`
-
-//     db.query( sql, [nom,prenom,email,password,service,role], (err, result) =>{
-//         if(err) {
-//             console.log(err);
+// exports.login = (req, res) => {
+//     const {email, password} = req.body;
+//     const userEmail = 'SELECT email FROM user WHERE email = ? ';
+//     const userPassword = 'SELECT password FROM user WHERE password = ?';
+//     const userId = 'SELECT id FROM user WHERE id = ?'
+//     db.query( () =>{
+//         if(userEmail !==  email){
+//             return res.status(401).json({error : 'Utilisateur introuvable'});
 //         }
-//         else{
-//             res.send( 'Profil créé !');
-//             console.log(result);
-
-//         } 
-//     });
-// };
-
-
-// exports.signup = (req, res, next) => {
-//     const user = req.body
-//     const sql = `INSERT INTO user (nom, prenom, email, password, service, role) VALUES (?,?,?,?,?,?)`
-//     const password = req.body.password;
-//     bcrypt.hash(password, 10)
-//         .then((hash) => {
-//             password = hash
-//             db.query( sql, user, (err, result) =>{
-//                 if(err) {
-//                     console.log(err);
-//                     return res.status(400).json({error: 'Utilisateur non sauvegardé '})
+//         bcrypt.compare(password, userPassword)
+//             .then( valid => {
+//                 if(!valid){
+//                     return res.status(401).json({ error: 'Mot de passe incorrect !' });
 //                 }
-//                 else{
-//                     console.log(result);
-//                     return res.status(201).json({message : 'Profil créé !'})
-//                 } 
-//             });
-//         })
-        
+//             })
+//             res.status(200).json({
+//                 userId: userId,
+//                 token: jwt.sign(
+//                     {userId: userId},
+//                     process.env.ACCESS_TOKEN_SECRET,
+//                     {expiresIn: '24h'}
+//                 )
+//             })
+//             .catch( res.status(500).json({ error: 'Problème lié à la connexion de l\'utilisateur !' }));
+//     })
+
+
 // };
 
+exports.login = (req, res) => {
+    // const {email,password} = req.body;
+    db.query('SELECT * FROM user WHERE email = ${db.escape(req.body.email)};', (err, result) =>{
+        if(err){
+            res.status(500).json({error: 'Echec de l\'opération'});
+            console.log(err);
+        }
+        if(!result[0]){
+            res.status(400).json({error: 'Email introuvable!'});
 
-
-
-
-exports.login = (req, res, next) => {
-
+        }
+        bcrypt.compare(req.body.password, result[0]['password'], (bErr, bResult) => {
+            if(bErr){
+                res.status(500).json({error: 'Echec de l\'opération lié au mots de passe'});
+                console.log(bErr);
+            }
+            if(bResult){
+                const token = jwt.sign(
+                    {userId: result[0].id},
+                    process.env.ACCESS_TOKEN_SECRET,
+                    {expiresIn: '24h'}
+                )
+                res.status(200).json({message: 'Bonjour!'});
+                console.log(bResult);
+            }
+        })
+    })
 };
 
-exports.deleteUser = (req, res, next) => {
+exports.logout = (req, res) => {
+
+    
+};
+
+exports.deleteUser = (req, res) => {
 
 };
 
