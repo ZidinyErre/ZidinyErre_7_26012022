@@ -1,9 +1,10 @@
 const db = require("../models/db");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const session = require('express-session');
 require('dotenv').config();
 
-exports.signup = async (req, res, next) => {
+exports.signup = async (req, res) => {
     const {nom, prenom, email, password, service, role} = req.body;
     let hashedPassword = await bcrypt.hash(password,10);
     console.log(hashedPassword);
@@ -21,34 +22,6 @@ exports.signup = async (req, res, next) => {
 };
 
 
-// exports.login = (req, res) => {
-//     const {email, password} = req.body;
-//     const userEmail = 'SELECT email FROM user WHERE email = ? ';
-//     const userPassword = 'SELECT password FROM user WHERE password = ?';
-//     const userId = 'SELECT id FROM user WHERE id = ?'
-//     db.query( () =>{
-//         if(userEmail !==  email){
-//             return res.status(401).json({error : 'Utilisateur introuvable'});
-//         }
-//         bcrypt.compare(password, userPassword)
-//             .then( valid => {
-//                 if(!valid){
-//                     return res.status(401).json({ error: 'Mot de passe incorrect !' });
-//                 }
-//             })
-//             res.status(200).json({
-//                 userId: userId,
-//                 token: jwt.sign(
-//                     {userId: userId},
-//                     process.env.ACCESS_TOKEN_SECRET,
-//                     {expiresIn: '24h'}
-//                 )
-//             })
-//             .catch( res.status(500).json({ error: 'Problème lié à la connexion de l\'utilisateur !' }));
-//     })
-
-
-// };
 
 exports.login = (req, res) => {
     const {email,password} = req.body;
@@ -72,16 +45,25 @@ exports.login = (req, res) => {
                     process.env.ACCESS_TOKEN_SECRET,
                     {expiresIn: '24h'}
                 )
-                res.status(200).json({message: 'Bonjour!'});
+                res.status(200).json({message: 'Bonjour et bienvenue!'});
+                console.log(token);
                 console.log(bResult);
+
             }
         })
     })
 };
 
 exports.logout = (req, res) => {
-
-    
+const {token , decodedToken} = require('../middlewares/auth')
+    if (token === decodedToken) {
+        delete(token);
+        // res.redirect('/');
+        res.status(200).json({message: 'Déconnecté'});
+    }else{
+        res.status(400).json({error: ' Problème lié à la connexion'});
+        console.log(err);
+    }
 };
 
 exports.deleteUser = (req, res) => {
