@@ -66,6 +66,36 @@ const {token , decodedToken} = require('../middlewares/auth')
     }
 };
 
+// exports.updateUser = (req, res) => {
+//     const {nom, prenom, password, service, role, id} = req.body;
+//     db.query('UPDATE user SET nom = ?, prenom = ?, password = ?, service = ?, role = ? WHERE id = ?', {nom : nom, prenom : prenom, password : password, service : service, role : role, id : id}, (err, result) => {
+//         if (err) {
+//             res.status(400).json({error : 'Utilisateur non modifié !'});
+//             console.log(err);
+//         }else{
+//             res.status(200).json({message : 'Utilisateur modifié !'})
+//             console.log(result);
+//         }
+//     })
+
+
+// };
+
+exports.updateUser = (req, res) => {
+    const {nom, prenom, password, service, role, id} = req.body;
+    db.query('UPDATE user SET nom = ?, prenom = ?, password = ?, service = ?, role = ? WHERE id = ?', [ nom, prenom, password, service, role, id], (err, result) => {
+        if (err) {
+            res.status(400).json({error : 'Utilisateur non modifié !'});
+            console.log(err);
+        }else{
+            res.status(200).json({message : 'Utilisateur modifié !'})
+            console.log(result);
+        }
+    })
+
+
+};
+
 exports.deleteUser = (req, res) => {
 
 };
@@ -74,9 +104,7 @@ exports.getUsers = (req, res, next) => {
 
 };
 
-exports.updateUser = (req, res, next) => {
 
-};
 
 exports.getOneUser = (req, res, next) => {
 
