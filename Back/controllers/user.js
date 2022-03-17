@@ -110,12 +110,20 @@ exports.deleteUser = (req, res) => {
     })
 };
 
-exports.getUsers = (req, res, next) => {
 
-};
-
-
-
-exports.getOneUser = (req, res, next) => {
-
+exports.getOneUser =  (req, res) => {
+    db.query('SELECT * FROM user WHERE id = ?', [req.params.id], (err, result) => {
+        if(!err){
+            if (result.lenght === []) {
+                res.status(400).json({error : 'Utilisateur introuvable!'});
+                console.log(err);
+            } else {
+                return res.status(200).json({result})           
+            }            
+            // return;
+        }else{
+            res.status(400).json({error : 'Utilisateur introuvable!'});
+            console.log(err);
+        }
+    })
 };
