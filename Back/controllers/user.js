@@ -81,23 +81,33 @@ const {token , decodedToken} = require('../middlewares/auth')
 
 // };
 
-exports.updateUser = (req, res) => {
-    const {nom, prenom, password, service, role, id} = req.body;
-    db.query('UPDATE user SET nom = ?, prenom = ?, password = ?, service = ?, role = ? WHERE id = ?', [ nom, prenom, password, service, role, id], (err, result) => {
-        if (err) {
-            res.status(400).json({error : 'Utilisateur non modifié !'});
-            console.log(err);
-        }else{
-            res.status(200).json({message : 'Utilisateur modifié !'})
-            console.log(result);
-        }
-    })
+exports.updateUser = async (req, res) => {
+        const {nom, prenom, password, service, role, id} = req.body;
+        let hashedPassword = await bcrypt.hash(password,10);
+        db.query('UPDATE user SET ? WHERE id = ?', {nom : nom, prenom : prenom, password : hashedPassword, service : service, role : role, id : req.params.id }, (err, result) => {
+            if (err) {
+                res.status(400).json({error : 'Utilisateur non modifié !'});
+                console.log(err);
+            }else{
+                res.status(200).json({message : 'Utilisateur modifié !'})
+                console.log(result);
+            }
+        })
+    
 
 
 };
 
 exports.deleteUser = (req, res) => {
+    db.query('DELETE FROM user WHERE id = ?', [req.params.id], (err, rows, fields) => {
+        if(!err){
+            res.status(200).json({message : 'Utilisateur supprimé !'})
+        }else{
+            res.status(400).json({error : 'Echec de l\'opération !'});
+            console.log(err);
 
+        }
+    })
 };
 
 exports.getUsers = (req, res, next) => {
