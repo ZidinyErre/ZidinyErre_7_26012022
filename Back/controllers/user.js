@@ -1,7 +1,6 @@
 const db = require("../models/db");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const session = require('express-session');
 require('dotenv').config();
 
 exports.signup = async (req, res) => {
