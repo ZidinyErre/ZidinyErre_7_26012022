@@ -1,9 +1,12 @@
 const express = require('express');
 const mysql = require('mysql');
 const db = require('./models/db');
+const path = require('path');
 const app = express();
 
 const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
+
 
 
 app.use((req, res, next) => {
@@ -19,8 +22,12 @@ app.options('/*', (_, res) => {
 
 app.use(express.urlencoded({ extended : true}));
 app.use(express.json());
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(express.static('images'));
  
 app.use('/api/auth', userRoutes);
+app.use('/api/post', postRoutes);
 
 //app.get('/createdb', (req, res) => {
 //    let sql = 'CREATE DATABASE groupomania';
