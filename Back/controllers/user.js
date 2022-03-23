@@ -44,7 +44,7 @@ exports.login = (req, res) => {
                     process.env.ACCESS_TOKEN_SECRET,
                     {expiresIn: '24h'}
                 )
-                res.status(200).json({message: 'Bonjour et bienvenue!'});
+                res.status(200).json({message: 'Bonjour et bienvenue!' + "" + token});
                 console.log(token);
                 console.log(bResult);
 
