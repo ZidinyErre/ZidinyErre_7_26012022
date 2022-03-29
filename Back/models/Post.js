@@ -2,7 +2,13 @@ const db = require("../models/db");
 
 
 exports.create = (req, res) => {
-    
+    const post = JSON.parse(req.body);
+    const image_adress = `${req.protocol}:\\${req.get('host')}/images/${req.file.filename}`;
+    db.promise().query( 'INSERT INTO post SET ?', [post, image_adress])
+    .then(response => JSON.stringify(response))
+    .catch(error => {throw error});
+
+
 };
 
 // exports.create = (data) => {
