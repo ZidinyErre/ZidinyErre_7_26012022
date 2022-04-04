@@ -1,6 +1,7 @@
-const db = require("../models/db");
+const db = require("../config/db");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const User = require('../models/user-model');
 require('dotenv').config();
 
 exports.signup = async (req, res) => {
@@ -24,6 +25,7 @@ exports.signup = async (req, res) => {
 
 exports.login = (req, res) => {
     const {email,password} = req.body;
+    console.log(email,password);
     db.query('SELECT * FROM user WHERE email = ?', [email],  (err, result) =>{
         if(err){
             res.status(500).json({error: 'Echec de l\'opération'});
@@ -112,7 +114,7 @@ exports.deleteUser = (req, res) => {
 exports.getOneUser =  (req, res) => {
     db.query('SELECT * FROM user WHERE id = ?', [req.params.id], (err, result) => {
         if(!err){
-            if (result.lenght === []) {
+            if (result.length === []) {
                 res.status(400).json({error : 'Utilisateur introuvable!'});
                 console.log(err);
             } else {

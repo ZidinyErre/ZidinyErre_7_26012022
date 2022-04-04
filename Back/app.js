@@ -23,12 +23,14 @@ app.options('/*', (_, res) => {
 app.use(express.urlencoded({ extended : true}));
 app.use(express.json());
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use(express.static('images'));
- 
+
 app.use('/api/auth', userRoutes);
 app.use('/api/post', postRoutes);
 
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(express.static('images'));
+ 
 //app.get('/createdb', (req, res) => {
 //    let sql = 'CREATE DATABASE groupomania';
 //    db.query(sql, (err,result) => {

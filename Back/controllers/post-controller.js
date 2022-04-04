@@ -1,6 +1,6 @@
-const db = require("../models/db");
+const db = require("../config/db");
 const jwt = require('jsonwebtoken');
-const Post = require('../models/Post');
+const Post = require('../models/post-model');
 require('dotenv').config();
 
 exports.create = (req, res) => {
