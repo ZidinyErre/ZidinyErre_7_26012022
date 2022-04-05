@@ -4,8 +4,8 @@ const db = require('./config/db');
 const path = require('path');
 const app = express();
 
-const userRoutes = require('./routes/user');
-const postRoutes = require('./routes/post');
+const userRoutes = require('./routes/user-route');
+const postRoutes = require('./routes/post-route');
 
 
 

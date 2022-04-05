@@ -14,33 +14,10 @@ exports.signup = async (req, res) => {
 exports.login = (req, res) => {
     const {email,password} = req.body;
     console.log(email,password);
-    db.query('SELECT * FROM user WHERE email = ?', [email],  (err, result) =>{
-        if(err){
-            res.status(500).json({error: 'Echec de l\'opération'});
-            console.log(err);
-        }
-        if(!result[0]){
-            res.status(400).json({error: 'Email introuvable!'});
+    db.promise().query('SELECT * FROM user WHERE email = ?', [email])
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
 
-        }
-        bcrypt.compare(password, result[0]['password'], (bErr, bResult) => {
-            if(bErr){
-                res.status(500).json({error: 'Echec de l\'opération lié au mots de passe'});
-                console.log(bErr);
-            }
-            if(bResult){
-                const token = jwt.sign(
-                    {userId: result[0].id},
-                    process.env.ACCESS_TOKEN_SECRET,
-                    {expiresIn: '24h'}
-                )
-                res.status(200).json({message: 'Bonjour et bienvenue!' + "" + token});
-                console.log(token);
-                console.log(bResult);
-
-            }
-        })
-    })
 };
 
 exports.logout = (req, res) => {
