@@ -1,6 +1,6 @@
 const express = require('express');
 const mysql = require('mysql');
-const db = require('./models/db');
+const db = require('./config/db');
 const path = require('path');
 const app = express();
 
