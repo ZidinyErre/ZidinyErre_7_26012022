@@ -1,44 +1,79 @@
 const db = require('../config/db');
 
 
-let User = function(user){
+class UserModels{
+    constructor(){
 
-    this.id = id;
-    this.nom = nom;
-    this.prenom = prenom;
-    this.email = email;
-    this.password = password;
-    this.creation_time = new Date();;
-    this.modification_time = new Date();;
-    this.service = service;
-    this.role = role;
-
+    }
+    signup(){
+        return new Promise((resolve, reject) =>{
+            db.query( 'INSERT INTO user SET ?', function(err, result){
+                if (err) reject({error: 'Erreur dans l\'inscription'});
+                resolve({message : 'Utilisateur créé !'});
+            })
+        })
+    }
 }
 
 
-    User.create =  async function  (newUser, result) {
-        let hashedPassword = await bcrypt.hash(password,10);
-        db.query( 'INSERT INTO user SET ?', newUser , {password : hashedPassword} , function(err, res) {
-            if (err) {
-                console.log("error: ", err);
-                result(err);
-            } else {
-                console.log(res);
-                result(res);
-            }
-        })
+module.exports = UserModels;
+// let User = function(user){
 
-    }
+//     this.nom = nom;
+//     this.prenom = prenom;
+//     this.email = email;
+//     this.password = password;
+//     this.creation_time = new Date();;
+//     this.modification_time = new Date();;
+//     this.service = service;
+//     this.role = role;
+
+// }
 
 
-module.exports = User;
+//     User.create =  async function  (newUser, result) {
+//         let hashedPassword = await bcrypt.hash(password,10);
+//         db.query( 'INSERT INTO user SET ?', newUser , {password : hashedPassword} , function(err, res) {
+//             if (err) {
+//                 console.log("error: ", err);
+//                 result(err);
+//             } else {
+//                 console.log(res);
+//                 result(res);
+//             }
+//         })
+
+//     }
+
+
+// module.exports = User;
+
+// exports.signup =  (req, res) => {
+
+//     function create(input) {
+//         db.query( 'INSERT INTO user SET ?', input, (err, result) =>{
+//             if(err) {
+//                 console.log(err);
+//             }
+//             else{
+//                 console.log(result);
+    
+//             } 
+//         });
+//     }
+   
+        
+// };
+
 // exports.signup = async (req, res) => {
 //     const {nom, prenom, email, password, service, role} = req.body;
 //     let hashedPassword = await bcrypt.hash(password,10);
 //     console.log(hashedPassword);
-//         db.query( 'INSERT INTO user SET ?', {nom : nom, prenom : prenom, email : email, password : hashedPassword, service : service, role : role})
-//         .then(res => console.log(res))
-//         .catch(err => console.log(err));
+//         db.query( 'INSERT INTO user SET ?', {nom : nom, prenom : prenom, email : email, password : hashedPassword, service : service, role : role}, function(err,data){
+//             if (err) throw(err);
+//             return console.log(data);
+//         })
+        
 // };
 
 

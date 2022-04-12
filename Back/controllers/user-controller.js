@@ -1,17 +1,69 @@
 const db = require("../config/db");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require("../models/user-model");
+const UserModels = require("../models/user-model");
 require('dotenv').config();
 
-//controller pas terminée ici
-exports.signup =  (req, res) => {
-        User.create(req.body)
-        .then(response =>  res.status(201).json({ response, message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({error: 'Utilisateur non sauvegardé ! L email est probablement déjà utilisé!'}));
-}
+let userModels = new UserModels();
 
-// exports.signup = async (req, res) => {
+exports.signup = async (req, res) => {
+        const {nom, prenom, email, password, service, role} = req.body;
+        let hashedPassword = await bcrypt.hash(password,10);
+        let sqlInserts = {nom : nom, prenom : prenom, email : email, password : hashedPassword, service : service, role : role};
+        userModels.signup(sqlInserts)
+                .then((result) => {
+                        res.status(201).json(JSON.stringify({result}));
+                        // res.status(201).json({result});
+
+                        
+                })
+                .catch((err) =>{
+                        res.status(400).json({err});
+                
+                });
+            
+};
+    
+
+//controller pas terminée ici
+// exports.signup =  (req, res) => {
+//         const new_user = new  User(req.body)
+
+//         if (req.body.constructor === 0) {
+//                 res.status(400).json({error: 'Utilisateur non sauvegardé ! L email est probablement déjà utilisé!'})
+                
+//         } else {
+//                 User.create(new_user, function (err, result){
+//                         if (err) {
+//                               res.send(err)  
+//                               res.status(201).json({ response, message: 'Utilisateur créé !' })
+//                         }
+//                 })
+//         }
+// }
+
+
+
+
+exports.signup = async (req, res) => {
+        const {nom, prenom, email, password, service, role} = req.body;
+        let hashedPassword = await bcrypt.hash(password,10);
+        console.log(hashedPassword);
+            db.query( 'INSERT INTO user SET ?', {nom : nom, prenom : prenom, email : email, password : hashedPassword, service : service, role : role}, (err, result) =>{
+                if(err) {
+                    res.status(400).json({error: 'Utilisateur non sauvegardé ! L email est probablement déjà utilisé!'});
+                    console.log(err);
+                }
+                else{
+                    res.status(201).json({ message: 'Utilisateur créé !' });
+                    console.log(result);
+        
+                } 
+            });
+    };
+    
+
+// exports.signup =  (req, res) => {
 //     User.signup(req.body)
 //         .then(response =>  res.status(201).json({ response, message: 'Utilisateur créé !' }))
 //         .catch(error => res.status(400).json({error: 'Utilisateur non sauvegardé ! L email est probablement déjà utilisé!'}));
