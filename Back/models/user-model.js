@@ -1,19 +1,43 @@
 const db = require('../config/db');
+const mysql = require('mysql');
 
 
 class UserModels{
     constructor(){
 
     }
-    signup(){
+    signup(slqInserts){
+        let sql = 'INSERT INTO user SET ?';
+        sql = mysql.format(sql,slqInserts);
         return new Promise((resolve, reject) =>{
-            db.query( 'INSERT INTO user SET ?', function(err, result){
+            db.query( sql , function(err, result){
                 if (err) reject({error: 'Erreur dans l\'inscription'});
                 resolve({message : 'Utilisateur créé !'});
             })
         })
     }
+
+    // login(){
+    //     return new Promise((resolve, reject) =>{
+    //         db.query( 'SELECT * FROM user WHERE email = ?', [email], function(err,result){
+                
+    //             if (err) reject ({ err });
+    //             if (![0]result ){
+    //                 reject({error : 'Utilisateur introuvable !'});
+    //             } else {
+                    
+    //             }
+    //         })
+    //     })
+    // }
 }
+
+// exports.login = (req, res) => {
+//     const {email,password} = req.body;
+//     console.log(email,password);
+//     db.query('SELECT * FROM user WHERE email = ?', [email])
+//         .then(res => console.log(res))
+//         .catch(err => console.log(err));
 
 
 module.exports = UserModels;
