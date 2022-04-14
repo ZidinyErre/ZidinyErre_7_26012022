@@ -1,6 +1,4 @@
 const db = require("../config/db");
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const UserModels = require("../models/user-model");
 require('dotenv').config();
 
@@ -14,21 +12,27 @@ exports.signup = async (req, res) => {
                 .then((result) => {
                         res.status(201).json(JSON.stringify({result}));
                         // res.status(201).json({result});
-
                 })
                 .catch((err) =>{
                         res.status(400).json({err});
-                
                 });
-            
 };
     
+exports.login = (req, res) => {
+        let email = req.body.email;
+        let password = req.body.password;
+        let sqlInserts = [email];
+
+        userModels.login(sqlInserts, password)
+                .then((result) => {
+                        res.status(200).json(JSON.stringify({result}));
+                })
+                .catch((err) =>{
+                        res.status(400).json({err});
+                });
 
 
-
-
-
-
+}
 // exports.signup = async (req, res) => {
 //         const {nom, prenom, email, password, service, role} = req.body;
 //         let hashedPassword = await bcrypt.hash(password,10);

@@ -1,4 +1,6 @@
 const db = require('../config/db');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 
 
@@ -17,19 +19,41 @@ class UserModels{
         })
     }
 
-    // login(){
-    //     return new Promise((resolve, reject) =>{
-    //         db.query( 'SELECT * FROM user WHERE email = ?', [email], function(err,result){
+    login(sqlInserts, password){
+        let sql = 'SELECT * FROM user WHERE email = ?' ;
+        sql = mysql.format(sql, sqlInserts);
+
+        return new Promise((resolve, reject) =>{
+            db.query( sql, function(err,result){
                 
-    //             if (err) reject ({ err });
-    //             if (![0]result ){
-    //                 reject({error : 'Utilisateur introuvable !'});
-    //             } else {
-                    
-    //             }
-    //         })
-    //     })
-    // }
+                if (err) reject({ err });
+                if (!result[0]){
+                    reject({error : 'Utilisateur introuvable !'});
+                } else {
+                    bcrypt.compare(password, result[0].password, (bErr, bResult) => {
+                        if(bErr){
+                            reject({error: 'Echec de l\'opération lié au mots de passe'});
+                            console.log(bErr);
+                        }
+                        if(bResult){
+                            const token = jwt.sign(
+                                {userId: result[0].id},
+                                process.env.ACCESS_TOKEN_SECRET,
+                                {expiresIn: '24h'}
+                            )
+                            resolve({message: 'Bonjour et bienvenue!' + "" + token});
+                            console.log(token);
+                            console.log(bResult);
+            
+                        }
+                    })
+                }
+            })
+        })
+
+    }
+
+
 }
 
 // exports.login = (req, res) => {
