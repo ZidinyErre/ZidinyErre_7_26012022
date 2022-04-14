@@ -54,14 +54,20 @@ class UserModels{
     }
 
 
+    deleteUser(sqlInserts){
+        let sql = 'DELETE FROM user WHERE id = ?';
+        sql = mysql.format(sql,sqlInserts);
+        return new Promise((resolve, reject) =>{
+            db.query(sql, function(err, result){
+                if (err) reject({error: 'Echec de l\'opération!'});
+                resolve({message : 'Utilisateur supprimé !'});            
+            })
+        })
+    }
+
+
 }
 
-// exports.login = (req, res) => {
-//     const {email,password} = req.body;
-//     console.log(email,password);
-//     db.query('SELECT * FROM user WHERE email = ?', [email])
-//         .then(res => console.log(res))
-//         .catch(err => console.log(err));
 
 
 module.exports = UserModels;
@@ -158,12 +164,6 @@ module.exports = UserModels;
 //     .catch(err => console.log(err));
 // };
 
-// exports.deleteUser = (req, res) => {
-//     const id = req.params.id;
-//     db.query('DELETE FROM user WHERE id = ?', [id])
-//     .then(res => console.log(res))
-//     .catch(err => console.log(err));
-// };
 
 
 // exports.getOneUser =  (req, res) => {

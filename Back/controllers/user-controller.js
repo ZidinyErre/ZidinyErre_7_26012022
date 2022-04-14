@@ -33,6 +33,18 @@ exports.login = (req, res) => {
 
 
 }
+exports.deleteUser = (req, res) => {
+        const userId = req.params.id;
+        let sqlInserts = [userId];
+        userModels.deleteUser( sqlInserts)
+                .then((result) => {
+                        res.status(200).json(JSON.stringify({result}));
+                })
+                .catch((err) =>{
+                        res.status(400).json({err});
+                });
+};
+
 // exports.signup = async (req, res) => {
 //         const {nom, prenom, email, password, service, role} = req.body;
 //         let hashedPassword = await bcrypt.hash(password,10);
