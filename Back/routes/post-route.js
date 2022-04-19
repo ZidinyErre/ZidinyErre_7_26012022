@@ -4,6 +4,6 @@ const postCtrl = require('../controllers/post-controller');
 const auth = require('../middlewares/auth');
 const multer = require('../middlewares/multer-config');
 
-router.post('/', auth, multer, postCtrl.create);
+router.post('/', auth, multer, postCtrl.createPost);
 
 module.exports = router;

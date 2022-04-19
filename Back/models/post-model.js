@@ -1,4 +1,24 @@
 const db = require("../config/db");
+const mysql = require('mysql');
+
+class PostsModels{
+    constructor(){
+
+    }
+    createPost(sqlInserts){
+        let sql = 'INSERT INTO post SET ?';
+        sql = mysql.format(sql, sqlInserts);
+        return new Promise((resolve, reject) => {
+            db.query(sql, function(err, result, fields){
+                if (err) throw err;
+                resolve({  message: "Post créé avec succès" })
+            })
+        })
+
+    }
+}
+
+module.exports = PostsModels;
 
 
 exports.create = (req, res) => {

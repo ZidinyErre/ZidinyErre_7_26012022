@@ -1,12 +1,22 @@
 const db = require("../config/db");
 const jwt = require('jsonwebtoken');
-const Post = require('../models/post-model');
+const PostsModels = require('../models/post-model');
 require('dotenv').config();
 
-exports.create = (req, res) => {
-    Post.create(req.body)
-        .then(response => res.status(201).json({response, message: "Post créé avec succès"}))
-        .catch(error => res.status(400).json(error.message));
+exports.createPost = (req, res) => {
+    const post = JSON.parse(req.body);
+    const image_adress = `${req.protocol}:\\${req.get('host')}/images/${req.file.filename}`;
+    let sqlInserts = [post, image_adress];
+    if (!sqlInserts.image_adress) {
+        sqlInserts = [post];
+    }
+    PostsModels.create(sqlInserts)
+    .then((response) => {
+        res.status(201).json(JSON.stringify(response))
+    })
+    .catch( (error) => {
+            res.status(400).json(error)
+    });
 }; 
 
 // exports.create = (req, res) => {
