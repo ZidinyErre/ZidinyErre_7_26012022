@@ -53,6 +53,23 @@ class UserModels{
 
     }
 
+    updateUser(sqlInserts){
+        let sql = 'UPDATE user SET nom = ?, prenom = ?, password = ?, service = ?, role = ? WHERE id = ?';
+        sql = mysql.format(sql, sqlInserts);
+        return new Promise((resolve, reject) =>{
+            db.query( sql, function(err,result){
+                if (err) return reject({error : 'Utilisateur non modifié !'});
+                resolve ({message : 'Utilisateur modifié !'});
+            })
+        })
+    };
+
+// exports.getOneUser =  (req, res) => {
+//     const id = req.params.id;
+//     db.query('SELECT * FROM user WHERE id = ?', [id]) 
+//     .then(res => console.log(res))
+//     .catch(err => console.log(err));
+// };
 
     deleteUser(sqlInserts){
         let sql = 'DELETE FROM user WHERE id = ?';

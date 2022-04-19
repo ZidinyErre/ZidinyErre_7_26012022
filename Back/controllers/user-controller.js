@@ -34,6 +34,23 @@ exports.login = (req, res) => {
 
 
 }
+
+exports.updateUser = async (req, res) => {
+        const {nom, prenom, password, service, role} = req.body;
+        const userId = req.params.id;
+        let hashedPassword = await bcrypt.hash(password,10);
+        let sqlInserts = [nom, prenom, hashedPassword, service, role, userId] ;
+        
+        userModels.updateUser(sqlInserts)
+        .then((response) => {
+                res.status(200).json(JSON.stringify(response))
+        })
+        .catch( (error) => {
+                res.status(400).json(error)
+        });
+
+};
+
 exports.deleteUser = (req, res) => {
         const userId = req.params.id;
         let sqlInserts = [userId];
