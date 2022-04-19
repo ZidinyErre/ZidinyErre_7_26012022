@@ -64,12 +64,21 @@ class UserModels{
         })
     };
 
-// exports.getOneUser =  (req, res) => {
-//     const id = req.params.id;
-//     db.query('SELECT * FROM user WHERE id = ?', [id]) 
-//     .then(res => console.log(res))
-//     .catch(err => console.log(err));
-// };
+    getOneUser(sqlInserts) {
+        let sql = 'SELECT * FROM user WHERE id = ?';
+        sql = mysql.format(sql, sqlInserts);
+        return new Promise((resolve, reject) =>{
+            db.query(sql, function(err, result){
+                if(err) return reject({ error : 'Page introuvable'});
+                if ([] === result) {
+                    resolve({err : ' Utilisateur introuvable !'});
+                }else{
+                    resolve(result);
+                }
+            }) 
+
+        })
+    };
 
     deleteUser(sqlInserts){
         let sql = 'DELETE FROM user WHERE id = ?';

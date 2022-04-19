@@ -51,6 +51,24 @@ exports.updateUser = async (req, res) => {
 
 };
 
+exports.getOneUser =  (req, res) => {
+    const userId = req.params.id;
+    let sqlInserts = [userId];
+    userModels.getOneUser( sqlInserts)
+            .then((result) => {
+                    if ([] === result) {
+                        res.status(404).json({err});
+                    }else{
+                        res.status(200).json(JSON.stringify({result}));
+
+                    }
+            })
+            .catch((err) =>{
+                    res.status(400).json({err});
+            });
+};
+
+
 exports.deleteUser = (req, res) => {
         const userId = req.params.id;
         let sqlInserts = [userId];
