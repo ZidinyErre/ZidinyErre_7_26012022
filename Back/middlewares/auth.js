@@ -20,9 +20,10 @@ module.exports = (req, res, next) => {
                 next();
             }
         })
+
+        console.log(req.userId);
     }catch (error){
         res.status(401).json({error: 'Requête non authentifié !'});
-        console.log(error);
     }
 };
 
