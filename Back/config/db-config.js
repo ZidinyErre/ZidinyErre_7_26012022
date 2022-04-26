@@ -1,6 +1,8 @@
+require('dotenv').config();
+
 module.exports = ({
-    HOST: "localhost",
-    USER: "root",
-    PASSWORD: "2525,pasM!",
-    DATABASES: "groupomania"
+    HOST: process.env.HOST,
+    USER:process.env.USER,
+    PASSWORD: process.env.PASSWORD,
+    DATABASES: process.env.DATABASES
 });

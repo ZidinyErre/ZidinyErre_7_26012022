@@ -5,6 +5,7 @@ require('dotenv').config();
 
 exports.createPost = (req, res) => {
     const post = JSON.parse(req.body);
+    // console.log("c'est le log du post" + req.body);
     const image_adress = `${req.protocol}:\\${req.get('host')}/images/${req.file.filename}`;
     let sqlInserts = [post, image_adress];
     if (!sqlInserts.image_adress) {
@@ -35,23 +36,23 @@ exports.createPost = (req, res) => {
 //     })
 // }; 
 
-exports.updatePost = (req, res) => {
-}
+// exports.updatePost = (req, res) => {
+// }
 
-exports.deletePost = (req, res) => {
-}
+// exports.deletePost = (req, res) => {
+// }
 
-exports.getAllPost = (req, res) => {
-}
+// exports.getAllPost = (req, res) => {
+// }
 
-exports.getOnePost = (req, res) => {
-}
+// exports.getOnePost = (req, res) => {
+// }
 
-exports.likesPost = (req, res) => {
-}
+// exports.likesPost = (req, res) => {
+// }
 
-exports.lovesPost = (req, res) => {
-}
+// exports.lovesPost = (req, res) => {
+// }
 
-exports.congratsPost = (req, res) => {
-}
+// exports.congratsPost = (req, res) => {
+// }
