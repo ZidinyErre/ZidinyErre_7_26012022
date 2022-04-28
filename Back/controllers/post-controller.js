@@ -3,15 +3,22 @@ const jwt = require('jsonwebtoken');
 const PostsModels = require('../models/post-model');
 require('dotenv').config();
 
+let postModels = new PostsModels();
+
+
 exports.createPost = (req, res) => {
-    const post = JSON.parse(req.body);
+    let  user_id = req.body.user_id;
+    let  user_service = req.body.user_service;
+    let  comment  = req.body.comment;
+
     // console.log("c'est le log du post" + req.body);
-    const image_adress = `${req.protocol}:\\${req.get('host')}/images/${req.file.filename}`;
-    let sqlInserts = [post, image_adress];
-    if (!sqlInserts.image_adress) {
-        sqlInserts = [post];
-    }
-    PostsModels.create(sqlInserts)
+    // const image_adress = `${req.protocol}:\\${req.get('host')}/images/${req.file.filename}`;
+    let sqlInserts = [user_id, user_service, comment];
+    // , image_adress
+    // if (!sqlInserts.image_adress) {
+    //     sqlInserts = [post];
+    // }
+    postModels.createPost(sqlInserts)
     .then((response) => {
         res.status(201).json(JSON.stringify(response))
     })
