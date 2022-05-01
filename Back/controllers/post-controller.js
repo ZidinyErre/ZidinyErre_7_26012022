@@ -11,6 +11,8 @@ exports.createPost = (req, res) => {
     let  user_service = req.body.user_service;
     let  comment  = req.body.comment;
 
+
+    
     // console.log("c'est le log du post" + req.body);
     // const image_adress = `${req.protocol}:\\${req.get('host')}/images/${req.file.filename}`;
     let sqlInserts = [user_id, user_service, comment];
