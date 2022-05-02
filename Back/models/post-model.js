@@ -6,10 +6,10 @@ class PostsModels{
 
     }
     createPost(sqlInserts){
-        let sql = 'INSERT INTO post SET ?';
+        let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , comment = ?';
         sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve, reject) => {
-            db.query(sql, function(err, result, fields){
+            db.query(sql, function(err, result){
                 if (err) throw err;
                 resolve({  message: "Post créé avec succès" })
             })
