@@ -1,13 +1,16 @@
 const express = require('express');
-const mysql = require('mysql');
-const db = require('./config/db');
 const path = require('path');
+const lodash = require('lodash');
+const fileUpload = require('express-fileupload');
+const morgan = require('morgan');
 const app = express();
 
 const userRoutes = require('./routes/user-route');
 const postRoutes = require('./routes/post-route');
 
-
+app.use(fileUpload({
+    createParentPath: true
+}));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -31,14 +34,7 @@ app.use('/api/post', postRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(express.static('images'));
  
-//app.get('/createdb', (req, res) => {
-//    let sql = 'CREATE DATABASE groupomania';
-//    db.query(sql, (err,result) => {
-//       if(err) throw err ;
-//        console.log(result);
-//        res.send('Database created..')
-//    });
-//});
+app.use(morgan('dev'));
 
 
 module.exports = app;

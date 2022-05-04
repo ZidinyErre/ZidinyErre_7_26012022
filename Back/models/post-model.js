@@ -1,12 +1,13 @@
 const db = require("../config/db");
 const mysql = require('mysql');
 
+
 class PostsModels{
     constructor(){
 
     }
     createPost(sqlInserts){
-        let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , comment = ?';
+        let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  comment = ?';
         sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve, reject) => {
             db.query(sql, function(err, result){

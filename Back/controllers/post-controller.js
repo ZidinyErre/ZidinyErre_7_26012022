@@ -6,20 +6,45 @@ require('dotenv').config();
 let postModels = new PostsModels();
 
 
-exports.createPost = (req, res) => {
-    let  user_id = req.body.user_id;
-    let  user_service = req.body.user_service;
-    let  comment  = req.body.comment;
+exports.createPost = async (req, res) => {
+    
+    const {user_id, user_service, comment } = req.body;
+    const image_adress = () => {
+        try {
+            if (!req.files) {
+                res.send({
+                    status:false,
+                    message: 'Image non téléchargée'
+                });
+            } else {
+                let image = req.files.image;
 
+                image.mv('./images/' + image.name);
 
+                res.send({
+                    status:true,
+                    message: 'Image téléchargée',
+                    data: {
+                        name: image.name,
+                        mimetype: image.mimetype,
+                        size: image.size
+                    }
+
+                })
+            }
+        } catch (error) {
+            res.status(500).json({error: 'Erreur lié à l\'image '})
+        }
+    }
     
     // console.log("c'est le log du post" + req.body);
     // const image_adress = `${req.protocol}:\\${req.get('host')}/images/${req.file.filename}`;
-    let sqlInserts = [user_id, user_service, comment];
-    // , image_adress
-    // if (!sqlInserts.image_adress) {
-    //     sqlInserts = [post];
-    // }
+    let sqlInserts = [user_id, user_service, comment, image_adress];
+    
+    if (!sqlInserts.image_adress) {
+        sqlInserts = [user_id, user_service, comment];
+    }
+    
     postModels.createPost(sqlInserts)
     .then((response) => {
         res.status(201).json(JSON.stringify(response))
