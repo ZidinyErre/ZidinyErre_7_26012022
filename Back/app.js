@@ -8,6 +8,8 @@ const app = express();
 const userRoutes = require('./routes/user-route');
 const postRoutes = require('./routes/post-route');
 
+// app.use(fileUpload());
+
 app.use(fileUpload({
     createParentPath: true
 }));

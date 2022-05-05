@@ -6,7 +6,6 @@ const path = require('path');
 //     'image/jpeg': 'jpg',
 //     'image/png': 'png',
 // };
-console.log("Test : ");
 
 const storage = multer.diskStorage({
 
