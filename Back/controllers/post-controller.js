@@ -54,6 +54,17 @@ exports.createPost = async (req, res) => {
     
 }; 
 
+exports.getAllPost = (req, res) => {
+
+    postModels.getAllPost()
+    .then((response) => {
+        res.status(200).json(JSON.stringify({response}))
+    })
+    .catch( (error) => {
+            res.status(400).json({error})
+    });
+
+}
 
 
 
@@ -129,8 +140,7 @@ exports.createPost = async (req, res) => {
 // exports.deletePost = (req, res) => {
 // }
 
-// exports.getAllPost = (req, res) => {
-// }
+
 
 // exports.getOnePost = (req, res) => {
 // }
