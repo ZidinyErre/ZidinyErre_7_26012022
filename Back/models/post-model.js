@@ -21,17 +21,11 @@ class PostsModels{
         let sql = 'SELECT id , user_id, creation_time, image_adress, user_service, comment FROM post';
         return new Promise((resolve, reject)=>{
             db.query(sql, function(err, result){
-                for (var i = 0; i < result.length; i++) {
-                    console.log(result[i]);
-                    if (err) return reject({error : 'Echec de l\'opération lié au post!'});
-                    resolve ({message : 'Voici tout les posts !' + `${result[i]}`});
-                };
-                
-
+                if (err) throw err;
+                resolve (result)
             })
-
-        })
-    }
+        }
+    )}
 }
 
 module.exports = PostsModels;
