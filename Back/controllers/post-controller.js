@@ -66,6 +66,35 @@ exports.getAllPost = (req, res) => {
 
 }
 
+exports.getOnePost = (req, res) => {
+    const postId = req.params.id;
+    let sqlInserts = [postId];
+    postModels.getOnePost(sqlInserts)
+    .then((response) => {
+        res.status(200).json(JSON.stringify({response}))
+    })
+    .catch((error) =>{
+        res.status(400).json({error})
+    });
+}
+
+
+exports.deletePost = (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
+    const userId = decodedToken.userId;
+    let postId = req.params.id;
+    let sqlInserts1 = [postId];
+    let sqlInserts2 = [postId , userId];
+    PostsModels.deletePost(sqlInserts1, sqlInserts2)
+    .then((response) => {
+        res.status(200).json(JSON.stringify({response}))
+    })
+    .catch((error) =>{
+        res.status(400).json({error})
+    });
+
+}
 
 
 // exports.createPost = async (req, res) => {
@@ -137,13 +166,10 @@ exports.getAllPost = (req, res) => {
 // exports.updatePost = (req, res) => {
 // }
 
-// exports.deletePost = (req, res) => {
-// }
 
 
 
-// exports.getOnePost = (req, res) => {
-// }
+
 
 // exports.likesPost = (req, res) => {
 // }
