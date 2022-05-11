@@ -29,33 +29,47 @@ class PostsModels{
 //getonepost marche pas
     getOnePost(sqlInserts){
         let sql = 'SELECT * FROM post WHERE id = ?';
-        mysql.format(sql, sqlInserts);
+        sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve, reject) =>{
-            if (err) return reject({err : "Utilisateur introuvable !"});
-            resolve ( )
+            db.query(sql, function(err, result){
+                if (err) return reject({err : "Utilisateur introuvable !"});
+                resolve ( result )
+            } )
+            
         })
 
     }
 
-    deletePost(sqlInserts1 , sqlInserts2){
-        let sql1 = 'SELECT * FROM post WHERE id = ?';
-        sql1 = mysql.format(sql1, sqlInserts1);
-        return new Promise((resolve, reject) => {
-            if (err) throw err;
-            if (sqlInserts2[1] == result[0].userId){
-                let sql2 = "DELETE FROM post WHERE id = ? AND userId = ?";
-                sql2 = mysql.format(sql2, sqlInserts2);
-                db.query(sql2, function(err, result) {
-                    if (err) throw err;
-                    resolve({message : 'Post supprimé !'})
-                })
-
-            }else{
-                reject({error : 'fonction indisponible !'})
-            }
+    deletePost(sqlInserts){
+        let sql = 'DELETE FROM post WHERE id = ?';
+        sql = mysql.format(sql,sqlInserts);
+        return new Promise((resolve, reject) =>{
+            db.query(sql, function(err, result){
+                if (err) return reject({err: 'Echec de l\'opération!'});
+                resolve({message : 'post supprimé !'});            
+            })
         })
+    }
+
+    // deletePost(sqlInserts1 , sqlInserts2){
+    //     let sql1 = 'SELECT * FROM post WHERE id = ?';
+    //     sql1 = mysql.format(sql1, sqlInserts1);
+    //     return new Promise((resolve, reject) => {
+    //         if (err) throw err;
+    //         if (sqlInserts2[1] == result[0].userId){
+    //             let sql2 = "DELETE FROM post WHERE id = ? AND userId = ?";
+    //             sql2 = mysql.format(sql2, sqlInserts2);
+    //             db.query(sql2, function(err, result) {
+    //                 if (err) throw err;
+    //                 resolve({message : 'Post supprimé !'})
+    //             })
+
+    //         }else{
+    //             reject({error : 'fonction indisponible !'})
+    //         }
+    //     })
         
-    }
+    // }
 
 }
 
