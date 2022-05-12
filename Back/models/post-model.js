@@ -1,5 +1,8 @@
 const db = require("../config/db");
 const mysql = require('mysql');
+const fs = require('fs');
+const {join} = require('path');
+
 
 
 class PostsModels{
@@ -57,20 +60,22 @@ class PostsModels{
         return new Promise((resolve, reject) => {
 
             db.query(sql1, function(err, result){
-            // for (let i = 0; i < result.length; i++) {
-            //     console.log('ypaa' + result[i]);
-            //     }
+        
                 console.log('yep' + sqlInserts2[1] + result[0].user_id + result[0].userId);
                 if (err) throw err;
                 if (sqlInserts2[1] == result[0].user_id){
-                    let sql2 = "DELETE FROM post WHERE id = ? AND user_id = ?";
-                    sql2 = mysql.format(sql2, sqlInserts2);
-                    db.query(sql2, function(err, result) {
-                        console.log('ype' +err);
-                        if (err) throw err;
-                        resolve({message : 'Post supprimé !'})
+                    const image = result[0].image_adress;
+                    const filename = join(__dirname,'images',image);
+                    fs.unlink(`images/${image}`, () =>{
+                        console.log(filename);
+                        console.log(image);
+                        let sql2 = "DELETE FROM post WHERE id = ? AND user_id = ?";
+                        sql2 = mysql.format(sql2, sqlInserts2);
+                        db.query(sql2, function(err, result) {
+                            if (err) throw err;
+                            resolve({message : 'Post supprimé !'})
+                        })
                     })
-    
                 }else{
                     reject({error : 'fonction indisponible !'})
                 }
