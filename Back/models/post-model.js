@@ -10,7 +10,7 @@ class PostsModels{
 
     }
     createPost(sqlInserts){
-        let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  comment = ?';
+        let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
         sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve, reject) => {
             db.query(sql, function(err, result){
@@ -21,7 +21,7 @@ class PostsModels{
 
     }
     getAllPost(){
-        let sql = 'SELECT id , user_id, creation_time, image_adress, user_service, comment FROM post';
+        let sql = 'SELECT id , user_id, creation_time, image_adress, user_service, annotation FROM post';
         return new Promise((resolve, reject)=>{
             db.query(sql, function(err, result){
                 if (err) throw err;
@@ -33,10 +33,19 @@ class PostsModels{
     getOnePost(sqlInserts){
         // SELECT * FROM post WHERE id = ? INNER JOIN comment ON comment.post_id = post.id*
         // SELECT * FROM post WHERE id = ?
-        let sql = ' SELECT * FROM post  JOIN comment ON comment.post_id = post.id WHERE post.id = ?';
+        let sql = ' SELECT * FROM post INNER JOIN comment ON comment.post_id = post.id WHERE post.id = ?';
         sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve, reject) =>{
             db.query(sql, function(err, result){
+                // Essaie de mise en place de condition pour savoir quoi faire si il n ' ya pas de commentaire au post (je pense qu'il faut inversé la logique de ce model)
+                if ([].length == 0 ){
+                    let sql = ' SELECT * FROM post WHERE id = ?';
+                    sql = mysql.format(sql, sqlInserts);
+                    db.query(sql, function(err, result){
+                        if (err) throw err;
+                        resolve({message : 'Pas de commentaire' + result})
+                    })
+                }
                 if (err) return reject({err : "Utilisateur introuvable !"});
                 resolve ( result )
             } )

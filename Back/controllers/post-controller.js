@@ -9,7 +9,7 @@ let postModels = new PostsModels();
 
 exports.createPost = async (req, res) => {
     
-    const {user_id, user_service, comment } = req.body;
+    const {user_id, user_service, annotation } = req.body;
     let image;
     let imagesUpload;
 
@@ -35,7 +35,7 @@ exports.createPost = async (req, res) => {
     image.mv(imagesUpload, function (err){
         if (err) return res.status(500).send(err);
 
-        let sqlInserts = [ user_id, user_service,  image.name, comment];
+        let sqlInserts = [ user_id, user_service,  image.name, annotation];
     
         // if (!sqlInserts.image_adress) {
         //     sqlInserts = [user_id, user_service, comment];

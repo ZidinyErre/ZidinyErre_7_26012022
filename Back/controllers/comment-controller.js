@@ -14,3 +14,15 @@ exports.createComment =  (req, res) => {
     });
 
 }
+
+exports.getOneComment = (req, res) => {
+    const commentId = req.params.id;
+    let sqlInserts = [commentId];
+    commentModels.getOneComment(sqlInserts)
+    .then((result) => {
+        res.status(200).json(JSON.stringify({result}));
+    })
+    .catch((err) =>{
+        res.status(400).json({err})
+    });
+}

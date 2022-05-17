@@ -16,6 +16,16 @@ class CommentsModels{
         })
 
     }
+    getOneComment(sqlInserts){
+        let sql = 'SELECT * FROM comment WHERE id = ?';
+        sql = mysql.format(sql, sqlInserts);
+        return new Promise((resolve, reject) =>{
+            db.query(sql, function(err, result){
+                if (err) throw err;
+                resolve(result)
+            })
+        })
+    }
 
 }
 
