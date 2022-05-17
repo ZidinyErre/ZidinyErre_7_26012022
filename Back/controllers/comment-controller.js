@@ -26,3 +26,15 @@ exports.getOneComment = (req, res) => {
         res.status(400).json({err})
     });
 }
+
+exports.deleteComment = (req, res) => {
+    const commentId = req.params.id;
+    let sqlInserts = [commentId];
+    commentModels.deleteComment(sqlInserts)
+    .then((result) => {
+        res.status(200).json(JSON.stringify({result}));
+    })
+    .catch((err) =>{
+        res.status(400).json({err})
+    });
+}

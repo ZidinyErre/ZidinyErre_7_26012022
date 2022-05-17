@@ -27,6 +27,17 @@ class CommentsModels{
         })
     }
 
+    deleteComment(sqlInserts){
+        let sql = 'DELETE FROM comment WHERE id = ?';
+        sql = mysql.format(sql,sqlInserts);
+        return new Promise((resolve, reject) =>{
+            db.query(sql, function(err, result){
+                if (err) reject({error: 'Echec de l\'opération!'});
+                resolve({message : 'Commentaire supprimé !'});            
+            })
+        })
+    }
+
 }
 
 module.exports = CommentsModels;
