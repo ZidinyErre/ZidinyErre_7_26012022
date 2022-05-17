@@ -31,7 +31,9 @@ class PostsModels{
     )}
 
     getOnePost(sqlInserts){
-        let sql = 'SELECT * FROM post WHERE id = ?';
+        // SELECT * FROM post WHERE id = ? INNER JOIN comment ON comment.post_id = post.id*
+        // SELECT * FROM post WHERE id = ?
+        let sql = ' SELECT * FROM post  JOIN comment ON comment.post_id = post.id WHERE post.id = ?';
         sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve, reject) =>{
             db.query(sql, function(err, result){
