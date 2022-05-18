@@ -49,10 +49,8 @@ exports.createPost = async (req, res) => {
                 res.status(400).json(error)
         });
     })
-    
-    
-    
 }; 
+
 
 exports.getAllPost = (req, res) => {
 
@@ -65,6 +63,7 @@ exports.getAllPost = (req, res) => {
     });
 
 }
+
 
 exports.getOnePost = (req, res) => {
     const postId = req.params.id;
@@ -79,17 +78,42 @@ exports.getOnePost = (req, res) => {
     });
 }
 
-// exports.deletePost = (req, res) => {
-//     const postId = req.params.id;
-//     let sqlInserts = [postId];
-//     postModels.deletePost( sqlInserts)
-//             .then((result) => {
-//                     res.status(200).json(JSON.stringify({result}));
-//             })
-//             .catch((err) =>{
-//                     res.status(400).json({err});
-//             });
-// };
+exports.updatePost = (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
+    const userId = decodedToken.userId;
+    let postId = req.params.id;
+
+    let { user_service, annotation} = req.body; 
+
+    let image;
+    let imagesUpload;
+    if (!req.files) {
+        res.send({
+        status:false,
+        message: 'Image non téléchargée'
+        });
+    }
+    image = req.files.image_adress;
+    imagesUpload = path.join(__dirname , "//..//images//",image.name );
+    
+    image.mv(imagesUpload, function (err){
+        if (err) return res.status(500).send(err);
+
+        let sqlInserts1 = [postId];
+        let sqlInserts2 = [  user_service, annotation, image.name , postId, userId ];
+        postModels.updatePost(sqlInserts1,sqlInserts2)
+        .then((response) => {
+                res.status(201).json(JSON.stringify({response}))
+            })
+            .catch((error) =>{
+                console.log(error);
+                res.status(400).json({error})
+            });
+    })
+
+    
+}
 
 exports.deletePost = (req, res) => {
     const token = req.headers.authorization.split(' ')[1];

@@ -54,16 +54,27 @@ class PostsModels{
 
     }
 
-    // deletePost(sqlInserts){
-    //     let sql = 'DELETE FROM post WHERE id = ?';
-    //     sql = mysql.format(sql,sqlInserts);
-    //     return new Promise((resolve, reject) =>{
-    //         db.query(sql, function(err, result){
-    //             if (err) return reject({err: 'Echec de l\'opération!'});
-    //             resolve({message : 'post supprimé !'});            
-    //         })
-    //     })
-    // }
+    updatePost(sqlInserts1 , sqlInserts2){
+        let sql1 = 'SELECT * FROM post WHERE id = ?';
+        sql1 = mysql.format(sql1, sqlInserts1);
+        return new Promise((resolve, reject) => {
+            db.query(sql1, function(err, result){
+                if (err) throw err;
+                if (sqlInserts2[4] == result[0].user_id){
+                    let sql2 = "UPDATE FROM  post SET  user_service = ?, annotation = ? , image_adress = ? , WHERE id = ? AND user_id = ?";
+                    sql2 = mysql.format(sql2, sqlInserts2);
+                    db.query(sql2, function(err, result) {
+                        if (err) throw err;
+                        resolve({message : 'Post modifié avec succés !'})
+                    }) 
+                }else{
+                    reject({error : 'fonction modification indisponible !'})
+                }
+            })
+        })
+    
+
+    }   
 
     deletePost(sqlInserts1 , sqlInserts2){
         let sql1 = 'SELECT * FROM post WHERE id = ?';
@@ -88,7 +99,7 @@ class PostsModels{
                         })
                     })
                 }else{
-                    reject({error : 'fonction indisponible !'})
+                    reject({error : 'fonction suppression indisponible !'})
                 }
             });
         })
