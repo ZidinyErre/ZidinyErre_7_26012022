@@ -60,16 +60,22 @@ class PostsModels{
         return new Promise((resolve, reject) => {
             db.query(sql1, function(err, result){
                 if (err) throw err;
-                if (sqlInserts2[4] == result[0].user_id){
-                    let sql2 = "UPDATE FROM  post SET  user_service = ?, annotation = ? , image_adress = ? , WHERE id = ? AND user_id = ?";
+                
+                if (sqlInserts2[0] == result[0].user_id){
+                    console.log('sqldél'+ sqlInserts2[0]);
+                    console.log('resl'+ result[0].user_id);
+                    let sql2 = "UPDATE  post SET  annotation = ? , image_adress = ?  WHERE id = ? AND user_id = ?";
                     sql2 = mysql.format(sql2, sqlInserts2);
                     db.query(sql2, function(err, result) {
+                        console.log('sql2'+sql2);
+
                         if (err) throw err;
                         resolve({message : 'Post modifié avec succés !'})
                     }) 
                 }else{
-                    reject({error : 'fonction modification indisponible !'})
+                    reject({error : 'fonction de modification indisponible !'})
                 }
+                
             })
         })
     

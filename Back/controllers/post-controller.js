@@ -6,7 +6,7 @@ require('dotenv').config();
 
 let postModels = new PostsModels();
 
-
+// Crée une Publication
 exports.createPost = async (req, res) => {
     
     const {user_id, user_service, annotation } = req.body;
@@ -22,10 +22,6 @@ exports.createPost = async (req, res) => {
 
     image = req.files.image_adress;
     imagesUpload = path.join(__dirname , "//..//images//",image.name );
-
-    // imagesUpload = path.join(__dirname + "//.." );
-    // imagesUpload = path.join(__dirname + "../images/" + image.name);
-    // let image_adress = image;
 
     console.log(image);
     console.log(imagesUpload);
@@ -51,7 +47,7 @@ exports.createPost = async (req, res) => {
     })
 }; 
 
-
+// Montre toute les Publications
 exports.getAllPost = (req, res) => {
 
     postModels.getAllPost()
@@ -64,6 +60,7 @@ exports.getAllPost = (req, res) => {
 
 }
 
+// Montre une  Publication
 
 exports.getOnePost = (req, res) => {
     const postId = req.params.id;
@@ -78,13 +75,14 @@ exports.getOnePost = (req, res) => {
     });
 }
 
+// Modifie une  Publication
 exports.updatePost = (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
     const userId = decodedToken.userId;
     let postId = req.params.id;
 
-    let { user_service, annotation} = req.body; 
+    let { annotation} = req.body; 
 
     let image;
     let imagesUpload;
@@ -97,11 +95,14 @@ exports.updatePost = (req, res) => {
     image = req.files.image_adress;
     imagesUpload = path.join(__dirname , "//..//images//",image.name );
     
+    // console.log(image);
+    // console.log(image.name);
+
     image.mv(imagesUpload, function (err){
         if (err) return res.status(500).send(err);
 
         let sqlInserts1 = [postId];
-        let sqlInserts2 = [  user_service, annotation, image.name , postId, userId ];
+        let sqlInserts2 = [ userId , postId, annotation , image.name];
         postModels.updatePost(sqlInserts1,sqlInserts2)
         .then((response) => {
                 res.status(201).json(JSON.stringify({response}))
@@ -115,6 +116,7 @@ exports.updatePost = (req, res) => {
     
 }
 
+// Supprime une  Publication
 exports.deletePost = (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
