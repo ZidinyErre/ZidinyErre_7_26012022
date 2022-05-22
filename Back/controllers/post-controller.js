@@ -79,39 +79,41 @@ exports.getOnePost = (req, res) => {
 exports.updatePost = (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
-    const userId = decodedToken.userId;
+    let userId = decodedToken.userId;
+    let user_id = userId;
     let postId = req.params.id;
 
     let { annotation} = req.body; 
 
-    let image;
-    let imagesUpload;
-    if (!req.files) {
-        res.send({
-        status:false,
-        message: 'Image non téléchargée'
-        });
-    }
-    image = req.files.image_adress;
-    imagesUpload = path.join(__dirname , "//..//images//",image.name );
+    // let image;
+    // let imagesUpload;
+    // if (!req.files) {
+    //     res.send({
+    //     status:false,
+    //     message: 'Image non téléchargée'
+    //     });
+    // }
+    // image = req.files.image_adress;
+    // imagesUpload = path.join(__dirname , "//..//images//",image.name );
     
     // console.log(image);
     // console.log(image.name);
+    // if (err) return res.status(500).send(err);
 
-    image.mv(imagesUpload, function (err){
-        if (err) return res.status(500).send(err);
-
-        let sqlInserts1 = [postId];
-        let sqlInserts2 = [ userId , postId, annotation , image.name];
-        postModels.updatePost(sqlInserts1,sqlInserts2)
-        .then((response) => {
-                res.status(201).json(JSON.stringify({response}))
-            })
-            .catch((error) =>{
-                console.log(error);
-                res.status(400).json({error})
-            });
-    })
+    let sqlInserts1 = [postId];
+    // , image.name
+    let sqlInserts2 = [ user_id , postId, annotation ];
+    postModels.updatePost(sqlInserts1,sqlInserts2)
+    .then((response) => {
+            res.status(200).json(JSON.stringify({response}))
+        })
+        .catch((error) =>{
+            console.log(error);
+            res.status(400).json({error})
+        });
+    // image.mv(imagesUpload, function (err){
+        
+    // })
 
     
 }

@@ -57,6 +57,8 @@ class PostsModels{
     updatePost(sqlInserts1 , sqlInserts2){
         let sql1 = 'SELECT * FROM post WHERE id = ?';
         sql1 = mysql.format(sql1, sqlInserts1);
+        console.log('sql1'+sql1);
+
         return new Promise((resolve, reject) => {
             db.query(sql1, function(err, result){
                 if (err) throw err;
@@ -64,7 +66,8 @@ class PostsModels{
                 if (sqlInserts2[0] == result[0].user_id){
                     console.log('sqldél'+ sqlInserts2[0]);
                     console.log('resl'+ result[0].user_id);
-                    let sql2 = "UPDATE  post SET  annotation = ? , image_adress = ?  WHERE id = ? AND user_id = ?";
+                    // , image_adress = ?
+                    let sql2 = "UPDATE  post SET  annotation = ?   WHERE id = ? AND user_id = ?";
                     sql2 = mysql.format(sql2, sqlInserts2);
                     db.query(sql2, function(err, result) {
                         console.log('sql2'+sql2);
