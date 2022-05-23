@@ -102,7 +102,9 @@ exports.updatePost = (req, res) => {
 
     let sqlInserts1 = [postId];
     // , image.name
-    let sqlInserts2 = [ user_id , postId, annotation ];
+    let sqlInserts2 = [annotation, postId, user_id   ];
+    console.log(sqlInserts2);
+
     postModels.updatePost(sqlInserts1,sqlInserts2)
     .then((response) => {
             res.status(200).json(JSON.stringify({response}))
