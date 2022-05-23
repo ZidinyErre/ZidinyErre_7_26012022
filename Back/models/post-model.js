@@ -62,11 +62,10 @@ class PostsModels{
             db.query(sql1, function(err, result){
                 if (err) throw err;
                 
-                if (sqlInserts2[2] == result[0].user_id){
-                    console.log('sqldél'+ sqlInserts2[2]);
+                if (sqlInserts2[3] == result[0].user_id){
+                    console.log('sqldél'+ sqlInserts2[3]);
                     console.log('resl'+ result[0].user_id);
-                    // , image_adress = ?
-                    let sql2 = "UPDATE  post SET  annotation = ?   WHERE id = ? ";
+                    let sql2 = "UPDATE  post SET  annotation = ?  , image_adress = ?  WHERE id = ? ";
                     sql2 = mysql.format(sql2, sqlInserts2);
                     db.query(sql2, function(err, result) {
                         console.log('sql2'+sql2);
