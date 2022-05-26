@@ -3,6 +3,8 @@ const path = require('path');
 const lodash = require('lodash');
 const fileUpload = require('express-fileupload');
 const morgan = require('morgan');
+
+// const { authenticated } = require('./middlewares/auth');
 const app = express();
 
 const userRoutes = require('./routes/user-route');

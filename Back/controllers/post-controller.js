@@ -85,37 +85,48 @@ exports.updatePost = (req, res) => {
 
     let { annotation} = req.body; 
 
-    // let image;
-    // let imagesUpload;
-    // if (!req.files) {
-    //     res.send({
-    //     status:false,
-    //     message: 'Image non téléchargée'
-    //     });
-    // }
-    // image = req.files.image_adress;
-    // imagesUpload = path.join(__dirname , "//..//images//",image.name );
+    let image;
+    let imagesUpload;
+    if (!req.files) {
+        res.send({
+        status:false,
+        message: 'Image non téléchargée'
+        });
+    }
+    image = req.files.image_adress;
+    imagesUpload = path.join(__dirname , "//..//images//",image.name );
+    if(image){
+        res.send({
+            status: true,
+            message: 'File is uploaded',
+            data: {
+                name: image.name,
+                mimetype: image.mimetype,
+                size: image.size
+            }
+        })
+    }
     
-    // console.log(image);
-    // console.log(image.name);
-    // if (err) return res.status(500).send(err);
+    console.log(image);
+    console.log(image.name);
 
     let sqlInserts1 = [postId];
-    // , image.name
-    let sqlInserts2 = [annotation, postId, user_id   ];
+    let sqlInserts2 = [annotation , image.name , postId, user_id   ];
     console.log(sqlInserts2);
 
-    postModels.updatePost(sqlInserts1,sqlInserts2)
-    .then((response) => {
+    
+    image.mv(imagesUpload, function (err){
+        if (err) return res.status(500).send(err);
+        
+        postModels.updatePost(sqlInserts1,sqlInserts2)
+        .then((response) => {
             res.status(200).json(JSON.stringify({response}))
         })
         .catch((error) =>{
             console.log(error);
             res.status(400).json({error})
         });
-    // image.mv(imagesUpload, function (err){
-        
-    // })
+    })
 
     
 }
