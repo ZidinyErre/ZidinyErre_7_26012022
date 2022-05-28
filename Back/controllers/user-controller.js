@@ -34,20 +34,7 @@ exports.login = (req, res) => {
                 });
 }
 
-exports.refresh = (req, res) => {
-        let email = req.body.email;
-        let refreshToken = req.body.refreshToken;
-        let password = req.body.password;
-        let sqlInserts = [email, refreshToken];
 
-        userModels.login(sqlInserts, password)
-                .then((result) => {
-                        res.status(200).json(JSON.stringify({result}));
-                })
-                .catch((err) =>{
-                        res.status(400).json({err});
-                });
-}
 
 exports.updateUser = async (req, res) => {
         const {nom, prenom, password, service, role} = req.body;
