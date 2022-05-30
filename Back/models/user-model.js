@@ -24,7 +24,6 @@ class UserModels{
     login(sqlInserts, password){
         let sql = 'SELECT * FROM user WHERE email = ?' ;
         sql = mysql.format(sql, sqlInserts);
-        // console.log(sqlInserts);
         return new Promise((resolve, reject) =>{
             db.query( sql, function(err,result){
                 

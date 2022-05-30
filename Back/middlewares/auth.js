@@ -22,6 +22,8 @@ module.exports = (req, res, next) => {
         })
 
         console.log("on est dans l'auth" + sqlInserts);
+        console.log('token' + token);
+
     }catch (error){
         res.status(401).json({error: 'Requête non authentifié !'});
     }
