@@ -12,10 +12,9 @@ exports.refresh = (req, res) => {
     let password = req.body.password;
     let verifyRefresh = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     let sqlInserts = [email, refreshToken];
-        // console.log(refreshToken);
-        // console.log(verifyRefresh);
-        // !== refreshToken teste en changer le refresh token sur postman
-    if (verifyRefresh  ) {
+     
+    // La partie else ne fonctionne pas  les erreur sont fournie par jwt
+    if ( verifyRefresh) {
 
         refreshModels.refresh(sqlInserts, password)
         .then((result) => {
@@ -24,7 +23,9 @@ exports.refresh = (req, res) => {
         .catch((err) =>{
                 res.status(400).json({err});
         });  
+
     } else {
+       
         res.status(400).send({error: 'Le refresh token est invalide!'});
 
     }
