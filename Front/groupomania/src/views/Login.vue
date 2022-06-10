@@ -13,7 +13,7 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">E-mail</label>
                         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <div id="emailHelp" class="form-text">Pas encore de compte ? <a href="http://localhost:8080/signup"> Par ici</a></div>
+                        <p id="emailHelp" class="form-text">Pas encore de compte ? <router-link to ="/signup"> Par ici</router-link></p>
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Mots de passe </label>

@@ -1,35 +1,57 @@
 <template>
 
     <div class="container">
+        <h1>Inscription</h1>
+        <br>
+        <br>
         <div class="row">
             <div class="col-md-3">
-                Left
+                
             </div>
             <div class="col-md-6">
-                Mid
+                <form class="row g-3">
+                    <div class="col-md-6">
+                        <label for="inputName" class="form-label">Nom</label>
+                        <input type="name" class="form-control" id="inputName">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputFirstName" class="form-label">Prénom</label>
+                        <input type="firstname" class="form-control" id="inputFirstName">
+                    </div>
+                    <p id="retourLogin" class="form-text">Vous avez déjà un compte? <router-link to ="/login"> Par ici</router-link></p>
+                    <div class="col-12">
+                        <label for="inputEmail" class="form-label">E-mail</label>
+                        <input type="email" class="form-control" id="inputEmail" placeholder="@">
+                    </div>
+                    <div class="col-12">
+                        <label for="inputPassword" class="form-label">Mots de passe </label>
+                        <input type="password" class="form-control" id="inputPassword" placeholder="A l'abri des regards indiscret ">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="inputService" class="form-label">Service</label>
+                        <input type="text" class="form-control" id="inputService">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="inputState" class="form-label">Statue</label>
+                        <select id="inputState" class="form-select">
+                        <option selected>Utilisateur</option>
+                        <option>Admin</option>
+                        </select>
+                    </div>
+
+                    
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">S'inscrire</button>
+                    </div>
+                </form>
             </div>
             <div class="col-md-3">
-                Right
+                
             </div>
         </div>
 
     </div>
-    <form>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-        </div>
-        <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1">
-        </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1">
-            <label class="form-check-label" for="exampleCheck1">Check me out</label>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    
 </template>
 
 <script>
