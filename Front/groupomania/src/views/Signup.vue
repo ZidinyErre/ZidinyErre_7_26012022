@@ -31,17 +31,17 @@
                         <label for="inputService" class="form-label">Service</label>
                         <input type="text" class="form-control" id="inputService">
                     </div>
-                    <div class="col-md-4">
+                    <!-- <div class="col-md-4">
                         <label for="inputState" class="form-label">Statue</label>
                         <select id="inputState" class="form-select">
                         <option selected>Utilisateur</option>
                         <option>Admin</option>
                         </select>
-                    </div>
+                    </div> -->
 
                     
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary">S'inscrire</button>
+                        <button  @click="createAccount()"  type="submit" class="btn btn-primary">S'inscrire</button>
                     </div>
                 </form>
             </div>
@@ -56,7 +56,28 @@
 
 <script>
 export default {
-
+    name: 'signup',
+    data: function () {
+        return{
+        nom: '', 
+        prenom: '',
+        email: '',
+        password: '',
+        service : ''
+        }
+        
+    },
+    methods: {
+        createAccount: function(){
+            this.$store.dispatch('createAccount',{
+                nom: this.nom, 
+                prenom: this.prenom,
+                email: this.email,
+                password: this.password,
+                service : this.service
+            })
+        }
+    }
 }
 </script>
 
