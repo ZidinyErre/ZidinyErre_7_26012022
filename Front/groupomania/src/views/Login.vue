@@ -13,7 +13,7 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">E-mail</label>
                         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <p id="emailHelp" class="form-text">Pas encore de compte ? <router-link to ="/signup"> Par ici</router-link></p>
+                        <p id="emailHelp" class="form-text">Pas encore de compte ? <a @click="goToInscription" class="linkTo"> Par ici</a></p>
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Mots de passe </label>
@@ -35,9 +35,17 @@
 <script>
 export default {
 
+    methods: {
+        goToInscription(){
+            this.$router.push('/signup')
+        }
+    }
+
 }
 </script>
 
 <style scoped>
-
+.linkTo{
+    cursor:pointer;
+}
 </style>

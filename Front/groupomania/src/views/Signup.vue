@@ -18,7 +18,7 @@
                         <label for="inputFirstName" class="form-label">Prénom</label>
                         <input type="firstname" class="form-control" id="inputFirstName">
                     </div>
-                    <p id="retourLogin" class="form-text">Vous avez déjà un compte? <router-link to ="/login"> Par ici</router-link></p>
+                    <p id="retourLogin" class="form-text">Vous avez déjà un compte? <a @click="goToConnexion" class="linkTo"> Par ici</a></p>
                     <div class="col-12">
                         <label for="inputEmail" class="form-label">E-mail</label>
                         <input type="email" class="form-control" id="inputEmail" placeholder="@">
@@ -68,6 +68,10 @@ export default {
         
     },
     methods: {
+    
+        goToConnexion(){
+            this.$router.push('/login')
+        },
         createAccount: function(){
             this.$store.dispatch('createAccount',{
                 nom: this.nom, 
@@ -82,5 +86,7 @@ export default {
 </script>
 
 <style scoped>
-
+.linkTo{
+    cursor: pointer;
+}
 </style>
