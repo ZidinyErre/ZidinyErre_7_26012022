@@ -152,6 +152,21 @@ exports.deletePost = (req, res) => {
 
 }
 
+exports.likesPost = (req, res) => {
+    let user_id = req.body.user_id;
+    let postId = req.body.postId;
+    let liked = req.body.liked;
+    let sqlInserts = [user_id,postId];
+
+    postModels.likesPost(sqlInserts,liked)
+    .then((response) => {
+        res.status(200).json(JSON.stringify({response}))
+    })
+    .catch((error) => {
+        res.status(400).json({error})
+    });
+}
+
 
 // exports.createPost = async (req, res) => {
     
@@ -227,8 +242,7 @@ exports.deletePost = (req, res) => {
 
 
 
-// exports.likesPost = (req, res) => {
-// }
+
 
 // exports.lovesPost = (req, res) => {
 // }

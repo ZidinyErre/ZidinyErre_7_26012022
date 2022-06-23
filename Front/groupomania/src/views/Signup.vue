@@ -56,6 +56,7 @@
 
 <script>
 import axios from 'axios'
+import { response } from 'express'
 
 export default {
     name: 'signup',
@@ -69,20 +70,20 @@ export default {
         }
         
     },
+    
     methods: {
     
         goToConnexion(){
             this.$router.push('/login')
         },
         createAccount(){
-            axios.post(`http://localhost:3000/api/auth/signup/`,{
+            axios.post('http://localhost:3000/api/auth/signup/',{
                 nom: this.nom, 
                 prenom: this.prenom,
                 email: this.email,
                 password: this.password,
                 service : this.service
-            })
-            
+            }).then(response => console.log(response));
         }
     }
 }

@@ -112,6 +112,10 @@ class PostsModels{
         })
         
     }
+    
+    likesPost(sqlInserts, liked){
+        let sql1 = 'INSERT INTO post SET '
+    }
 
 }
 
