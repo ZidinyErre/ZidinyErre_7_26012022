@@ -153,14 +153,18 @@ exports.deletePost = (req, res) => {
 }
 
 exports.likesPost = (req, res) => {
-    let user_id = req.body.user_id;
-    let postId = req.body.postId;
+    let user_like = req.body.user_id;
+    let postId = req.params.id;
     let liked = req.body.liked;
-    let sqlInserts = [user_id,postId];
+    let sqlInserts = [user_like,postId];
+    // console.log(liked);
+    // console.log(user_id);
+    // console.log(postId);
+
 
     postModels.likesPost(sqlInserts,liked)
     .then((response) => {
-        res.status(200).json(JSON.stringify({response}))
+        res.status(201).json(JSON.stringify({response}))
     })
     .catch((error) => {
         res.status(400).json({error})
