@@ -115,15 +115,16 @@ class PostsModels{
     }
     
     likesPost(sqlInserts, liked){
-        let sql1 = 'UPDATE post SET user_like = ?, like_count = +1 WHERE id = ?';
+        let sql1 = 'UPDATE post SET user_like = ?, like_count = like_count+1 WHERE id = ?';
         sql1 = mysql.format(sqlInserts, sql1);
-        let sql2 = 'UPDATE post SET user_like = ?, like_count = -1 WHERE id = ?';
+        let sql2 = 'UPDATE post SET user_like = ?, like_count = like_count-1 WHERE id = ?';
         sql2 = mysql.format(sqlInserts, sql2);
         return new Promise((resolve,reject) =>{
             console.log(liked);
             console.log(sql1);
             if (liked === true) {
                 db.query(sql1, function(err, result){
+                    
                     if (err) return reject({err : "La Fonction d'ajout de like a échoué"});
                     resolve({message: 'Like ajouté'})
                     console.log(err);

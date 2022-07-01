@@ -3,6 +3,11 @@ const path = require('path');
 const lodash = require('lodash');
 const fileUpload = require('express-fileupload');
 const morgan = require('morgan');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+// let corsOptions = {
+//     origin: 'http://localhost:8080/'
+// }
 
 // const { authenticated } = require('./middlewares/auth');
 const app = express();
@@ -25,12 +30,17 @@ app.use((req, res, next) => {
     
     next();
 });
-app.options('/*', (_, res) => {
-    res.sendStatus(200);
-});
 
-app.use(express.urlencoded({ extended : true}));
-app.use(express.json());
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+// app.options('/*', (_, res) => {
+//     res.sendStatus(200);
+// });
+
+// app.use(express.urlencoded({ extended : true}));
+// app.use(express.json());
 
 
 app.use('/api/auth', userRoutes);
