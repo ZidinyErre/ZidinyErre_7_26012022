@@ -5,9 +5,9 @@ const fileUpload = require('express-fileupload');
 const morgan = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-// let corsOptions = {
-//     origin: 'http://localhost:8080/'
-// }
+let corsOptions = {
+    origin: 'http://localhost:8080/'
+}
 
 // const { authenticated } = require('./middlewares/auth');
 const app = express();
@@ -31,7 +31,7 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 

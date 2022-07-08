@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import http from '../http-common'
 import { response } from 'express'
 
 export default {
@@ -77,7 +77,7 @@ export default {
             this.$router.push('/login')
         },
         createAccount(){
-            axios.post('http://localhost:3000/api/auth/signup/',{
+            http.post('/auth/signup/',{
                 nom: this.nom, 
                 prenom: this.prenom,
                 email: this.email,
