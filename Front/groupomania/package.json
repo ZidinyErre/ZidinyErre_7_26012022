@@ -18,6 +18,7 @@
     "url": "^0.11.0",
     "util": "^0.12.4",
     "vue": "^3.2.13",
+    "vue-route-middleware": "^1.0.7",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
   },

@@ -1,9 +1,22 @@
-import axios from 'axios' ;
+import http from '../http-common'
 
-export default  async function auth({ next, router}) {
-    await axios.post('http://localhost/3000/api/auth/token' , {
-        token: localStorage.getItem('token')
-    })
-    .then(() => next())
-    .catch(() => router.push({name: 'login'}));
+export default (to,from, next) =>{
+    let auth =  http.post('/auth/token' , {
+                token: localStorage.getItem('token')
+                })
+
+   if(!auth){
+
+    next({name: 'login'})
+
+    return false;
+   }
 }
+
+// export default  async function auth({ next, router}) {
+//     await http.post('/auth/token' , {
+//         token: localStorage.getItem('token')
+//     })
+//     .then(() => next())
+//     .catch(() => router.push({name: 'login'}));
+// }
