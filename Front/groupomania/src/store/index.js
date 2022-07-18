@@ -1,7 +1,9 @@
-import { createStore } from 'vuex'
-import http from '@/http-common';
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-export default createStore({
+Vue.use(Vuex)
+
+export default new Vuex.Store({
   state: {
   },
   getters: {
@@ -9,17 +11,6 @@ export default createStore({
   mutations: {
   },
   actions: {
-    createAccount: ({commit}, userInfos) => {
-      commit;
-      console.log(userInfos);
-      instance.post('/signup', userInfos)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch( function (error){
-        console.log(error);
-      });
-    }
   },
   modules: {
   }

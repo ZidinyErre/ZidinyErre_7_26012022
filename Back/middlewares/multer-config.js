@@ -5,7 +5,7 @@ const path = require('path');
 //     'image/jpg': 'jpg',
 //     'image/jpeg': 'jpg',
 //     'image/png': 'png',
-// };
+// }; 
 
 const storage = multer.diskStorage({
 

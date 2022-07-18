@@ -40,7 +40,7 @@ class UserModels{
                             token : jwt.sign(
                                 {userId: result[0].id},
                                 process.env.ACCESS_TOKEN_SECRET,
-                                {expiresIn: '60s'}
+                                {expiresIn: '72h'}
                             ),
                             refreshToken : jwt.sign(
                                 {userId: result[0].id},
