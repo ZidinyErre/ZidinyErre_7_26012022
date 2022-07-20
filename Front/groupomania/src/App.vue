@@ -1,18 +1,14 @@
 <template>
   <div id="app">
 
-    <AllNav/>
+  <all-nav></all-nav>
 
-    <!-- <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/> -->
+    
   </div>
 </template>
 
 <script>
-import AllNav from './components/Nav.vue'
+import AllNav from './components/AllNav.vue'
 
  export default {
   name: 'App',
