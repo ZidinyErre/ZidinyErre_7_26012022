@@ -1,23 +1,15 @@
 <template>
-    <div class="lanav">
-        <nav>
-            <ul>
-                <li>
-                    <router-link to="/">Home</router-link> |
-                </li>
-                <li>
-                    <router-link to="/about">About</router-link>
-                </li>
-            </ul>
-                    <router-view/>
-
-        </nav>
-        
+<div class="allnav">
+      <img src="../assets/icon-left-font.png" alt="logo-groupomania" class="logo">
+      <div>
+                <router-link to="/">Home</router-link> |
+                <router-link to="/signup">Signup</router-link> |
+                <router-link to="/login">Login</router-link> |
+                <router-link to="/post">Publication</router-link>
+        <router-view/>
+            </div>
     </div>
-
-   
-
-    
+          
 </template>
 
 <script>
@@ -26,9 +18,14 @@
 
 <style scoped>
 
+.logo{
+    width: 15em;
+}
+
 ul{
     background-color: aqua;
     display: flex;
 }
+
 
 </style>

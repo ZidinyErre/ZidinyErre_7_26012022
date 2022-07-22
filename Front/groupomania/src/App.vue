@@ -1,14 +1,12 @@
 <template>
   <div id="app">
-
-  <all-nav></all-nav>
-
-    
+    <AllNav></AllNav>
   </div>
 </template>
 
 <script>
 import AllNav from './components/AllNav.vue'
+
 
  export default {
   name: 'App',
@@ -27,7 +25,11 @@ import AllNav from './components/AllNav.vue'
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  
 }
+
+
+
 
 nav {
   padding: 30px;
