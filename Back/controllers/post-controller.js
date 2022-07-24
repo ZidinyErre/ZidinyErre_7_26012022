@@ -27,7 +27,7 @@ exports.createPost = async (req, res) => {
     console.log(imagesUpload);
     console.log(__dirname);
     console.log(typeof(image));
-
+    // .mv permet de mettre le req.files ou on veut
     image.mv(imagesUpload, function (err){
         if (err) return res.status(500).send(err);
 
