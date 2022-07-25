@@ -8,43 +8,63 @@ let postModels = new PostsModels();
 
 // Crée une Publication
 exports.createPost = async (req, res) => {
-    
-    const {user_id, user_service, annotation } = req.body;
-    let image;
-    let imagesUpload;
 
-    if (!req.files) {
-        res.send({
-        status:false,
-        message: 'Image non téléchargée'
-        });
-    }
+    if (!req.body.image_adress) {
 
-    image = req.files.image_adress;
-    imagesUpload = path.join(__dirname , "//..//images//",image.name );
+        const {user_id, user_service, annotation } = req.body;
 
-    console.log(image);
-    console.log(imagesUpload);
-    console.log(__dirname);
-    console.log(typeof(image));
-    // .mv permet de mettre le req.files ou on veut
-    image.mv(imagesUpload, function (err){
-        if (err) return res.status(500).send(err);
+        let sqlInserts1 = [user_id, user_service, annotation];
 
-        let sqlInserts = [ user_id, user_service,  image.name, annotation];
-    
-        // if (!sqlInserts.image_adress) {
-        //     sqlInserts = [user_id, user_service, comment];
-        // }
-        
-        postModels.createPost(sqlInserts)
+        postModels.createPost(sqlInserts1)
         .then((response) => {
             res.status(201).json(JSON.stringify(response))
         })
         .catch( (error) => {
                 res.status(400).json(error)
         });
-    })
+
+
+    }else{
+        const {user_id, user_service, annotation } = req.body;
+        let image;
+        let imagesUpload;
+        
+        if (!req.files) {
+            res.send({
+            status:false,
+            message: 'Image non téléchargée'
+            });
+        }
+
+        image = req.files.image_adress;
+        imagesUpload = path.join(__dirname , "//..//images//",image.name );
+
+        console.log(image);
+        console.log(imagesUpload);
+        console.log(__dirname);
+        console.log(typeof(image));
+
+        // .mv permet de mettre le req.files ou on veut
+        image.mv(imagesUpload, function (err){
+            if (err) return res.status(500).send(err);
+
+            let sqlInserts2 = [ user_id, user_service,  image.name, annotation];
+        
+            // if (!sqlInserts.image_adress) {
+            //     sqlInserts = [user_id, user_service, annotation];
+            // }
+            
+            postModels.createPost(sqlInserts2)
+            .then((response) => {
+                res.status(201).json(JSON.stringify(response))
+            })
+            .catch( (error) => {
+                    res.status(400).json(error)
+            });
+        })
+    }
+    
+    
 }; 
 
 // Montre toute les Publications
@@ -82,10 +102,16 @@ exports.updatePost = (req, res) => {
     let userId = decodedToken.userId;
     let user_id = userId;
     let postId = req.params.id;
+    let dataImage = req.files;
+    let request = req.body;
 
-    let { annotation} = req.body; 
 
-    let image;
+    let { annotation, image_adress} = req.body; 
+    console.log(dataImage);
+    console.log(request);
+
+
+    // let image_adress;
     let imagesUpload;
     if (!req.files) {
         res.send({
@@ -93,29 +119,30 @@ exports.updatePost = (req, res) => {
         message: 'Image non téléchargée'
         });
     }
-    image = req.files.image_adress;
-    imagesUpload = path.join(__dirname , "//..//images//",image.name );
-    if(image){
+    image_adress = req.files.image_adress;
+    imagesUpload = path.join(__dirname , "//..//images//",image_adress.name );
+    if(image_adress){
         res.send({
             status: true,
             message: 'File is uploaded',
             data: {
-                name: image.name,
-                mimetype: image.mimetype,
-                size: image.size
+                name: image_adress.name,
+                mimetype: image_adress.mimetype,
+                size: image_adress.size
             }
         })
     }
     
-    console.log(image);
-    console.log(image.name);
+    console.log(image_adress);
+    // console.log(image.name);
+
 
     let sqlInserts1 = [postId];
-    let sqlInserts2 = [annotation , image.name , postId, user_id   ];
+    let sqlInserts2 = [annotation , image_adress.name , postId, user_id   ];
     console.log(sqlInserts2);
 
     
-    image.mv(imagesUpload, function (err){
+    image_adress.mv(imagesUpload, function (err){
         if (err) return res.status(500).send(err);
         
         postModels.updatePost(sqlInserts1,sqlInserts2)

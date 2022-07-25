@@ -10,17 +10,31 @@ class PostsModels{
     constructor(){
 
     }
-    createPost(sqlInserts){
-        let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
-        sql = mysql.format(sql, sqlInserts);
-        return new Promise((resolve, reject) => {
-            db.query(sql, function(err, result){
-                if (err) throw err;
-                resolve({  message: "Post créé avec succès" })
+    createPost(sqlInserts1, sqlInserts2){
+        if (sqlInserts1) {
+            let sql1 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,  annotation = ?';
+            sql1 = mysql.format(sql1, sqlInserts1);
+            return new Promise((resolve, reject) => {
+                db.query(sql1, function(err, result){
+                    if (err) throw err;
+                    resolve({  message: "Post sans photo créé avec succès" })
+                })
             })
-        })
+        } else {
+            let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
+            sql2 = mysql.format(sql2, sqlInserts2);
+            return new Promise((resolve, reject) => {
+                db.query(sql2, function(err, result){
+                    if (err) throw err;
+                    resolve({  message: "Post avec photo créé avec succès" })
+                })
+            })
+        }
+
+        
 
     }
+
     getAllPost(){
         let sql = 'SELECT id , user_id, creation_time, image_adress, user_service, annotation FROM post';
         return new Promise((resolve, reject)=>{
@@ -66,7 +80,7 @@ class PostsModels{
                 if (sqlInserts2[3] == result[0].user_id){
                     console.log('sqldél'+ sqlInserts2[3]);
                     console.log('resl'+ result[0].user_id);
-                    let sql2 = "UPDATE  post SET  annotation = ?  , image_adress = ?  WHERE id = ? ";
+                    let sql2 = "UPDATE  post SET  annotation = ?  , image_adress = ?  WHERE id = ? AND user_id = ? ";
                     sql2 = mysql.format(sql2, sqlInserts2);
                     db.query(sql2, function(err, result) {
                         console.log('sql2'+sql2);
