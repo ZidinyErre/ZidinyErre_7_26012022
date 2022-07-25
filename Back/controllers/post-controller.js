@@ -9,22 +9,9 @@ let postModels = new PostsModels();
 // Crée une Publication
 exports.createPost = async (req, res) => {
 
-    if (!req.body.image_adress) {
-
-        const {user_id, user_service, annotation } = req.body;
-
-        let sqlInserts1 = [user_id, user_service, annotation];
-
-        postModels.createPost(sqlInserts1)
-        .then((response) => {
-            res.status(201).json(JSON.stringify(response))
-        })
-        .catch( (error) => {
-                res.status(400).json(error)
-        });
+    if (req.files) {
 
 
-    }else{
         const {user_id, user_service, annotation } = req.body;
         let image;
         let imagesUpload;
@@ -62,6 +49,23 @@ exports.createPost = async (req, res) => {
                     res.status(400).json(error)
             });
         })
+
+        
+
+
+    }else{
+      
+        const {user_id, user_service, annotation } = req.body;
+
+        let sqlInserts1 = [user_id, user_service, annotation];
+
+        postModels.createPost(sqlInserts1)
+        .then((response) => {
+            res.status(201).json(JSON.stringify(response))
+        })
+        .catch( (error) => {
+                res.status(400).json(error)
+        });
     }
     
     

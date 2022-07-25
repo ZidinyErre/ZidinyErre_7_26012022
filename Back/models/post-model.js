@@ -11,7 +11,7 @@ class PostsModels{
 
     }
     createPost(sqlInserts1, sqlInserts2){
-        if (sqlInserts1) {
+        if (!sqlInserts2.image_adress ) {
             let sql1 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,  annotation = ?';
             sql1 = mysql.format(sql1, sqlInserts1);
             return new Promise((resolve, reject) => {
@@ -23,6 +23,7 @@ class PostsModels{
         } else {
             let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
             sql2 = mysql.format(sql2, sqlInserts2);
+            console.log(sql2+ "sql2");
             return new Promise((resolve, reject) => {
                 db.query(sql2, function(err, result){
                     if (err) throw err;
@@ -30,7 +31,7 @@ class PostsModels{
                 })
             })
         }
-
+            
         
 
     }
