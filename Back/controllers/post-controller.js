@@ -7,10 +7,11 @@ require('dotenv').config();
 let postModels = new PostsModels();
 
 // Crée une Publication
+// Pourquoi tu as mis async?
+// CReate post marche pas totalement pour l'instant
 exports.createPost = async (req, res) => {
 
     if (req.files) {
-
 
         const {user_id, user_service, annotation } = req.body;
         let image;
@@ -25,23 +26,21 @@ exports.createPost = async (req, res) => {
 
         image = req.files.image_adress;
         imagesUpload = path.join(__dirname , "//..//images//",image.name );
-
         console.log(image);
         console.log(imagesUpload);
         console.log(__dirname);
         console.log(typeof(image));
-
         // .mv permet de mettre le req.files ou on veut
         image.mv(imagesUpload, function (err){
             if (err) return res.status(500).send(err);
 
-            let sqlInserts2 = [ user_id, user_service,  image.name, annotation];
+            let sqlInserts1 = [ user_id, user_service,  image.name, annotation];
         
             // if (!sqlInserts.image_adress) {
             //     sqlInserts = [user_id, user_service, annotation];
             // }
             
-            postModels.createPost(sqlInserts2)
+            postModels.createPost(sqlInserts1)
             .then((response) => {
                 res.status(201).json(JSON.stringify(response))
             })
@@ -49,17 +48,13 @@ exports.createPost = async (req, res) => {
                     res.status(400).json(error)
             });
         })
-
-        
-
-
     }else{
       
         const {user_id, user_service, annotation } = req.body;
 
-        let sqlInserts1 = [user_id, user_service, annotation];
+        let sqlInserts2 = [user_id, user_service, annotation];
 
-        postModels.createPost(sqlInserts1)
+        postModels.createPost(sqlInserts2)
         .then((response) => {
             res.status(201).json(JSON.stringify(response))
         })
@@ -67,7 +62,6 @@ exports.createPost = async (req, res) => {
                 res.status(400).json(error)
         });
     }
-    
     
 }; 
 

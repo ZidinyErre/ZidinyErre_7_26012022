@@ -4,35 +4,44 @@ const fs = require('fs');
 const {join, resolve} = require('path');
 const { reject } = require("lodash");
 
-
+// Il faut vérifier que chaque partie marche avec et sans images !!!
 
 class PostsModels{
     constructor(){
 
     }
-    createPost(sqlInserts1, sqlInserts2){
-        if (!sqlInserts2.image_adress ) {
-            let sql1 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,  annotation = ?';
-            sql1 = mysql.format(sql1, sqlInserts1);
-            return new Promise((resolve, reject) => {
-                db.query(sql1, function(err, result){
-                    if (err) throw err;
-                    resolve({  message: "Post sans photo créé avec succès" })
+    createPost( sqlInserts1, sqlInserts2){
+            if (sqlInserts1 === 4 ) {
+                let sql1 = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
+                sql1 = mysql.format(sql1, sqlInserts1);
+                return new Promise((resolve, reject) => {
+                    db.query(sql1, function(err, result){
+                        if (err) throw err;
+                        resolve({  message: "Post  avec photo créé avec succès" })
+                        console.log(sql1+ "sql1");
+
+                    })
                 })
-            })
-        } else {
-            let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
-            sql2 = mysql.format(sql2, sqlInserts2);
-            console.log(sql2+ "sql2");
-            return new Promise((resolve, reject) => {
-                db.query(sql2, function(err, result){
-                    if (err) throw err;
-                    resolve({  message: "Post avec photo créé avec succès" })
+            } else {
+                let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+                sql2 = mysql.format(sql2, sqlInserts2);
+                return new Promise((resolve, reject) => {
+                    db.query(sql2, function(err, result){
+                        if (err) throw err;
+                        resolve({  message: "Post  sans photocréé avec succès" })
+                        console.log(sql2+ "sql2");
+                    })
                 })
-            })
-        }
-            
-        
+            }
+            // let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
+            // sql = mysql.format(sql, sqlInserts);
+            // console.log(sql+ "sql2");
+            // return new Promise((resolve, reject) => {
+            //     db.query(sql, function(err, result){
+            //         if (err) throw err;
+            //         resolve({  message: "Post  créé avec succès" })
+            //     })
+            // })        
 
     }
 
