@@ -10,26 +10,26 @@ class PostsModels{
     constructor(){
 
     }
-    createPost( sqlInserts1, sqlInserts2){
-            if (sqlInserts1 === 4 ) {
-                let sql1 = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
-                sql1 = mysql.format(sql1, sqlInserts1);
+    createPost( sqlInserts){
+            if (sqlInserts.length === 4 ) {
+                let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
+                sql= mysql.format(sql, sqlInserts);
                 return new Promise((resolve, reject) => {
-                    db.query(sql1, function(err, result){
+                    db.query(sql, function(err, result){
                         if (err) throw err;
                         resolve({  message: "Post  avec photo créé avec succès" })
-                        console.log(sql1+ "sql1");
+                        console.log(sql+ "sql1");
 
                     })
                 })
             } else {
-                let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
-                sql2 = mysql.format(sql2, sqlInserts2);
+                let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+                sql = mysql.format(sql, sqlInserts);
                 return new Promise((resolve, reject) => {
-                    db.query(sql2, function(err, result){
+                    db.query(sql, function(err, result){
                         if (err) throw err;
-                        resolve({  message: "Post  sans photocréé avec succès" })
-                        console.log(sql2+ "sql2");
+                        resolve({  message: "Post  sans photo créé avec succès" })
+                        console.log(sql+ "sql2");
                     })
                 })
             }
@@ -107,7 +107,7 @@ class PostsModels{
     
 
     }    
-
+    // DELETE FROM groupomania.post WHERE id= 7 AND user_id= 30 AND post.image_adress IS NULL; Permets d'avoir un post sans image 
     deletePost(sqlInserts1 , sqlInserts2){
         let sql1 = 'SELECT * FROM post WHERE id = ?';
         sql1 = mysql.format(sql1, sqlInserts1);

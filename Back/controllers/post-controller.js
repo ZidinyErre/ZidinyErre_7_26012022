@@ -34,13 +34,13 @@ exports.createPost = async (req, res) => {
         image.mv(imagesUpload, function (err){
             if (err) return res.status(500).send(err);
 
-            let sqlInserts1 = [ user_id, user_service,  image.name, annotation];
+            let sqlInserts = [ user_id, user_service,  image.name, annotation];
         
             // if (!sqlInserts.image_adress) {
             //     sqlInserts = [user_id, user_service, annotation];
             // }
             
-            postModels.createPost(sqlInserts1)
+            postModels.createPost(sqlInserts)
             .then((response) => {
                 res.status(201).json(JSON.stringify(response))
             })
@@ -52,9 +52,9 @@ exports.createPost = async (req, res) => {
       
         const {user_id, user_service, annotation } = req.body;
 
-        let sqlInserts2 = [user_id, user_service, annotation];
+        let sqlInserts = [user_id, user_service, annotation];
 
-        postModels.createPost(sqlInserts2)
+        postModels.createPost(sqlInserts)
         .then((response) => {
             res.status(201).json(JSON.stringify(response))
         })
