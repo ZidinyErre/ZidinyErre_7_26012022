@@ -10,29 +10,60 @@ class PostsModels{
     constructor(){
 
     }
-    createPost( sqlInserts){
-            if (sqlInserts.length === 4 ) {
-                let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
-                sql= mysql.format(sql, sqlInserts);
-                return new Promise((resolve, reject) => {
-                    db.query(sql, function(err, result){
-                        if (err) throw err;
-                        resolve({  message: "Post  avec photo créé avec succès" })
-                        console.log(sql+ "sql1");
-
-                    })
-                })
-            } else {
-                let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
-                sql = mysql.format(sql, sqlInserts);
-                return new Promise((resolve, reject) => {
-                    db.query(sql, function(err, result){
-                        if (err) throw err;
-                        resolve({  message: "Post  sans photo créé avec succès" })
-                        console.log(sql+ "sql2");
-                    })
-                })
+    testPost(req) {
+        return new Promise((resolve, reject) => {
+            if (!sqlInserts.annotation) {
+                return reject({ message:  'Nope mon pote'})
             }
+            
+            if (req.image_adress && req.image_adress === 22) {
+                reject({})
+            }
+
+            let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+            let message = '';
+            if (sqlInserts.image_adress) {
+                sql += ', image_adress = ?';
+                message = "Post  avec photo créé avec succès"
+            } else {
+                message = "Post  sans photo créé avec succès"
+            }
+
+            db.query(sql, function(err, result){
+                if (err) throw err;
+                resolve({  message })
+            })
+
+        })
+    }
+    /**
+     * Création d'un post
+     * champs required 'annotation', ..
+     */
+    createPost( sqlInserts){
+        if (!sqlInserts.annotation) {
+            return Promise.reject({ message:  'Nope mon pote'})
+        }
+        // Youtube DevAdventure
+        // Youtube WebDevSimplified
+        // Youtube Grafikart puissance 4 (react, nodejs)
+        // TODO check Tree
+        // TODO check Sequelize
+        let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+        let message = '';
+        if (sqlInserts.image_adress) {
+            sql += ', image_adress = ?';
+            message = "Post  avec photo créé avec succès"
+        } else {
+            message = "Post  sans photo créé avec succès"
+        }
+
+        return new Promise((resolve, reject) => {
+            db.query(sql, function(err, result){
+                if (err) throw err;
+                resolve({  message })
+            })
+        })
             // let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
             // sql = mysql.format(sql, sqlInserts);
             // console.log(sql+ "sql2");
