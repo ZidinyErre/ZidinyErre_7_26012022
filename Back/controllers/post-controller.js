@@ -44,7 +44,7 @@ exports.createPost =  (req, res) => {
 
             let sqlInserts = [ user_id, user_service,  image.name, annotation];
             console.log(sqlInserts + 'controller1');
-
+            console.log(req.body.annotation + "controllannot1");
             // if (!sqlInserts.image_adress) {
             //     sqlInserts = [user_id, user_service, annotation];
             // }
@@ -62,7 +62,7 @@ exports.createPost =  (req, res) => {
     }else{
       
         const {user_id, user_service, annotation } = req.body;
-
+console.log(req.body.annotation + "controllannot2");
         let sqlInserts = [user_id, user_service, annotation];
         console.log(sqlInserts + 'controller2');
 

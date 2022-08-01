@@ -3,6 +3,7 @@ const mysql = require('mysql');
 const fs = require('fs');
 const {join, resolve} = require('path');
 const { reject } = require("lodash");
+const { rejects } = require("assert");
 
 // Il faut vérifier que chaque partie marche avec et sans images !!!
 
@@ -45,38 +46,68 @@ class PostsModels{
     // Youtube WebDevSimplified
     // TODO check Sequelize
     createPost( sqlInserts){
-        console.log(sqlInserts + 'annot');
-        let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
-        let message = '';
+        console.log(sqlInserts.annotation + 'annot');
+
+
+
+        if (sqlInserts.annotation === undefined) {
+            return new Promise((resolve,reject) => {
+            reject({ message:  'Veuillez remplir la partie commentaire de cette publication.'})
+            })
+        } else if (sqlInserts.image_adress ) {
+            let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
+            sql= mysql.format(sql, sqlInserts);
+            return new Promise((resolve, reject) => {
+                db.query(sql, function(err, result){
+                    if (err) throw err;
+                    resolve({  message: "Post  avec photo créé avec succès" })
+                    console.log(sql+ "sql1");
+                })
+            })
+        } else {
+            let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+            sql = mysql.format(sql, sqlInserts);
+            return new Promise((resolve, reject) => {
+                db.query(sql, function(err, result){
+                    if (err) throw err;
+                    resolve({  message: "Post  sans photo créé avec succès" })
+                    console.log(sql+ "sql2");
+                })
+            })
+        }
+ 
+        // return new Promise((resolve, reject) => {
+
+        //     if (!sqlInserts.annotation) {
+        //           return reject({ message:  'Veuillez remplir la partie commentaire de cette publication.'})
+        //         }
+
+        //     let sql = '';
+        //     let message = '';
+        //     if (sqlInserts.length === 4){
+        //         sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ?,  annotation = ?';
+        //         message = "Post  avec photo créé avec succès"
+        //     } else {
+        //         sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+        //         message = "Post  sans photo créé avec succès"
+        //     }
+        //     sql = mysql.format(sql, sqlInserts);
+        //     db.query(sql, function(err, result){
+        //         if (err) throw err;
+        //         resolve({  message })
+        //         console.log(sql + 'dbquery');
+    
+        //     })
+        // })
+
+
         
 
-        // if (!sqlInserts.annotation) {
-        //     return  Promise.reject({ message:  'Veuillez remplir la partie commentaire de cette publication.'})
-        // }
+            
 
-            if (sqlInserts.image_adress){
-                sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ?,  annotation = ?';
-                message = "Post  avec photo créé avec succès"
-            } else {
-                message = "Post  sans photo créé avec succès"
-            }
-         
 
-        return new Promise((resolve, reject) => {
-            db.query(sql, function(err, result){
-                if (err) throw err;
-                resolve({  message })
-            })
-        })
-            // let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
-            // sql = mysql.format(sql, sqlInserts);
-            // console.log(sql+ "sql2");
-            // return new Promise((resolve, reject) => {
-            //     db.query(sql, function(err, result){
-            //         if (err) throw err;
-            //         resolve({  message: "Post  créé avec succès" })
-            //     })
-            // })        
+
+            
 
     }
 
