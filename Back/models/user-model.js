@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
 require('dotenv').config();
 
-
+//TODO Mets les images ici aussi
 
 class UserModels{
     constructor(){

@@ -9,7 +9,15 @@ let postModels = new PostsModels();
 // Crée une Publication
 // Pourquoi tu as mis async?
 // CReate post marche pas totalement pour l'instant
-exports.createPost = async (req, res) => {
+// async
+exports.createPost =  (req, res) => {
+    // if(req.body.annotation){
+    //     res.send({
+    //         status:false,
+    //         message: 'Veuillez remplir la partie commentaire de cette publication.'
+    //     })
+
+    // } else
 
     if (req.files) {
 
@@ -35,24 +43,28 @@ exports.createPost = async (req, res) => {
             if (err) return res.status(500).send(err);
 
             let sqlInserts = [ user_id, user_service,  image.name, annotation];
-        
+            console.log(sqlInserts + 'controller1');
+
             // if (!sqlInserts.image_adress) {
             //     sqlInserts = [user_id, user_service, annotation];
             // }
             
             postModels.createPost(sqlInserts)
+
             .then((response) => {
                 res.status(201).json(JSON.stringify(response))
             })
             .catch( (error) => {
                     res.status(400).json(error)
             });
+
         })
     }else{
       
         const {user_id, user_service, annotation } = req.body;
 
         let sqlInserts = [user_id, user_service, annotation];
+        console.log(sqlInserts + 'controller2');
 
         postModels.createPost(sqlInserts)
         .then((response) => {

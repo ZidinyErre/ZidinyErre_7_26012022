@@ -40,23 +40,27 @@ class PostsModels{
      * Création d'un post
      * champs required 'annotation', ..
      */
+
+    // Youtube DevAdventure
+    // Youtube WebDevSimplified
+    // TODO check Sequelize
     createPost( sqlInserts){
-        if (!sqlInserts.annotation) {
-            return Promise.reject({ message:  'Nope mon pote'})
-        }
-        // Youtube DevAdventure
-        // Youtube WebDevSimplified
-        // Youtube Grafikart puissance 4 (react, nodejs)
-        // TODO check Tree
-        // TODO check Sequelize
+        console.log(sqlInserts + 'annot');
         let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
         let message = '';
-        if (sqlInserts.image_adress) {
-            sql += ', image_adress = ?';
-            message = "Post  avec photo créé avec succès"
-        } else {
-            message = "Post  sans photo créé avec succès"
-        }
+        
+
+        // if (!sqlInserts.annotation) {
+        //     return  Promise.reject({ message:  'Veuillez remplir la partie commentaire de cette publication.'})
+        // }
+
+            if (sqlInserts.image_adress){
+                sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ?,  annotation = ?';
+                message = "Post  avec photo créé avec succès"
+            } else {
+                message = "Post  sans photo créé avec succès"
+            }
+         
 
         return new Promise((resolve, reject) => {
             db.query(sql, function(err, result){
