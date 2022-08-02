@@ -45,36 +45,59 @@ class PostsModels{
     // Youtube DevAdventure
     // Youtube WebDevSimplified
     // TODO check Sequelize
-    createPost( sqlInserts){
-        console.log(sqlInserts.annotation + 'annot');
+    // TODO  Rendre annotation vide innutilisable côté front
+    createPost( sqlInserts1, sqlInserts2){
+        console.log(sqlInserts1+ 'annot1');
+        console.log(sqlInserts2+ 'annot2');
 
+        let sql1 = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
+            sql1= mysql.format(sql1, sqlInserts1);
 
+            let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+            sql2 = mysql.format(sql2, sqlInserts2);
 
-        if (sqlInserts.annotation === undefined) {
-            return new Promise((resolve,reject) => {
-            reject({ message:  'Veuillez remplir la partie commentaire de cette publication.'})
-            })
-        } else if (sqlInserts.image_adress ) {
-            let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
-            sql= mysql.format(sql, sqlInserts);
             return new Promise((resolve, reject) => {
-                db.query(sql, function(err, result){
-                    if (err) throw err;
-                    resolve({  message: "Post  avec photo créé avec succès" })
-                    console.log(sql+ "sql1");
-                })
+                console.log(sql1+ "début1");
+                console.log(sql1.annotation+"annotation1");
+                
+                    db.query(sql1, function(err, result){
+                        if (err) throw err;
+                        resolve({  message: "Post  avec photo créé avec succès" })
+                        console.log(sql1+ "sql1");
+                    })
+                
             })
-        } else {
-            let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
-            sql = mysql.format(sql, sqlInserts);
-            return new Promise((resolve, reject) => {
-                db.query(sql, function(err, result){
-                    if (err) throw err;
-                    resolve({  message: "Post  sans photo créé avec succès" })
-                    console.log(sql+ "sql2");
-                })
-            })
-        }
+
+        // if (sqlInserts1  ) {
+            
+        //     let sql1 = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
+        //     sql1= mysql.format(sql1, sqlInserts1);
+
+        //     let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+        //     sql2 = mysql.format(sql2, sqlInserts2);
+        //     return new Promise((resolve, reject) => {
+        //         console.log(sql1+ "début1");
+        //         console.log(sql1.annotation+"annotation1");
+                
+        //             db.query(sql1, function(err, result){
+        //                 if (err) throw err;
+        //                 resolve({  message: "Post  avec photo créé avec succès" })
+        //                 console.log(sql1+ "sql1");
+        //             })
+                
+        //     })
+        // }else{
+        //     let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+        //     sql2 = mysql.format(sql2, sqlInserts2);
+        //     return new Promise((resolve, reject) => {
+        //         console.log(sql2+ "début2");
+        //             db.query(sql2, function(err, result){
+        //                 if (err) throw err;
+        //                 resolve({  message: "Post  sans photo créé avec succès" })
+        //                 console.log(sql2+ "sql2");
+        //             })
+        //     })
+        // }
  
         // return new Promise((resolve, reject) => {
 

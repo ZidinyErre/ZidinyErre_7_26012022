@@ -11,26 +11,26 @@ let postModels = new PostsModels();
 // CReate post marche pas totalement pour l'instant
 // async
 exports.createPost =  (req, res) => {
-    // if(req.body.annotation){
-    //     res.send({
-    //         status:false,
-    //         message: 'Veuillez remplir la partie commentaire de cette publication.'
-    //     })
+    console.log(req.body.annotation + "controllerannot"); 
+    if(!req.body.annotation){
+        res.send({
+            status:false,
+            message: 'Veuillez remplir la partie commentaire de cette publication.'
+        })
 
-    // } else
+    }else if (req.files) {
 
-    if (req.files) {
 
         const {user_id, user_service, annotation } = req.body;
         let image;
         let imagesUpload;
         
-        if (!req.files) {
-            res.send({
-            status:false,
-            message: 'Image non téléchargée'
-            });
-        }
+        // if (!req.files) {
+        //     res.send({
+        //     status:false,
+        //     message: 'Image non téléchargée'
+        //     });
+        // }
 
         image = req.files.image_adress;
         imagesUpload = path.join(__dirname , "//..//images//",image.name );
@@ -42,14 +42,13 @@ exports.createPost =  (req, res) => {
         image.mv(imagesUpload, function (err){
             if (err) return res.status(500).send(err);
 
-            let sqlInserts = [ user_id, user_service,  image.name, annotation];
-            console.log(sqlInserts + 'controller1');
-            console.log(req.body.annotation + "controllannot1");
+            let sqlInserts1 = [ user_id, user_service,  image.name, annotation];
+            console.log(sqlInserts1 + 'controller1');
             // if (!sqlInserts.image_adress) {
             //     sqlInserts = [user_id, user_service, annotation];
             // }
             
-            postModels.createPost(sqlInserts)
+            postModels.createPost(sqlInserts1)
 
             .then((response) => {
                 res.status(201).json(JSON.stringify(response))
@@ -62,11 +61,11 @@ exports.createPost =  (req, res) => {
     }else{
       
         const {user_id, user_service, annotation } = req.body;
-console.log(req.body.annotation + "controllannot2");
-        let sqlInserts = [user_id, user_service, annotation];
-        console.log(sqlInserts + 'controller2');
+        console.log(req.body.annotation + "controllannot2");
+        let sqlInserts2 = [user_id, user_service, annotation];
+        console.log(sqlInserts2 + 'controller2');
 
-        postModels.createPost(sqlInserts)
+        postModels.createPost(sqlInserts2)
         .then((response) => {
             res.status(201).json(JSON.stringify(response))
         })
