@@ -163,40 +163,54 @@ class PostsModels{
     
 
     }    
+    // SELECT * FROM groupomania.post WHERE id= 46  AND post.image_adress IS NULL
+    // DELETE FROM post WHERE id = ? AND user_id = ? AND post.image_adress IS NULL
     // DELETE FROM groupomania.post WHERE id= 7 AND user_id= 30 AND post.image_adress IS NULL; Permets d'avoir un post sans image 
-    deletePost(sqlInserts1 , sqlInserts2){
-        let sql1 = 'SELECT * FROM post WHERE id = ?';
-        sql1 = mysql.format(sql1, sqlInserts1);
-
-        let sql = 'DELETE FROM post WHERE id= ? AND user_id= ? AND post.image_adress IS NULL';
-        sql= mysql.format(sql1, sqlInserts1);
+    // TODO Est ce que celui qui l'id 30 peut supprimer le post de l'id 32 par exemple
+    deletePost( sqlInserts2){
+        // let sql1 = 'SELECT * FROM post  WHERE id = ? AND user_id = ? ';
+        // sql1 = mysql.format(sql1, sqlInserts2);
+        console.log(sqlInserts2);
         return new Promise((resolve, reject) => {
 
-            db.query(sql1, function(err, result){
-        
-                console.log('yep' + sqlInserts2[1] + result[0].user_id + result[0].userId);
-                if (err) throw err;
-                if (sqlInserts2[1] == result[0].user_id){
-                    const image = result[0].image_adress;
-                    const filename = join(__dirname,'images',image);
-                    fs.unlink(`images/${image}`, () =>{
-                        console.log(filename);
-                        console.log(image);
+                    // console.log('yep' + sqlInserts2[1] + result[0].user_id + result[0].userId);
+                    // if (err) throw err;
+                    
                         let sql2 = "DELETE FROM post WHERE id = ? AND user_id = ?";
                         sql2 = mysql.format(sql2, sqlInserts2);
                         db.query(sql2, function(err, result) {
+
+
+                            const image = result[0].image_adress;
+                            const filename = join(__dirname,'images',image);
+                            fs.unlink(`images/${image}`, () =>{
+                            console.log(filename);
+                            console.log(image);
+
                             if (err) throw err;
-                            resolve({message : 'Post supprimé !'})
+                            resolve({message : 'Post avec image supprimé !'})
                         })
-                    })
-                }else{
-                    reject({error : 'fonction suppression indisponible !'})
-                }
-            });
+                    })  
+                    // if (sqlInserts2[1] == result[0].user_id){
+                        
+                    // }
+                // if(!sql1){
+                //     let sql2 = "DELETE FROM post WHERE id = ? AND user_id = ?";
+                //     sql2 = mysql.format(sql2, sqlInserts2);
+                //     db.query(sql2, function(err, result) {
+                //         if (err) throw err;
+                //         resolve({message : 'Post sans image supprimé !'})
+                //     })
+                // }else{
+                    
+        
+                // }
+                // }else{
+                //     reject({error : 'fonction suppression indisponible !'})
+                // }
         })
         
-    }
-    
+    }    
     likesPost(sqlInserts, liked){
         let sql1 = 'UPDATE post SET user_like = ?, like_count = like_count+1 WHERE id = ?';
         sql1 = mysql.format(sqlInserts, sql1);
