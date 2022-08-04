@@ -46,58 +46,33 @@ class PostsModels{
     // Youtube WebDevSimplified
     // TODO check Sequelize
     // TODO  Rendre annotation vide innutilisable côté front
-    createPost( sqlInserts1, sqlInserts2){
-        console.log(sqlInserts1+ 'annot1');
-        console.log(sqlInserts2+ 'annot2');
-
-        let sql1 = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
-            sql1= mysql.format(sql1, sqlInserts1);
-
-            let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
-            sql2 = mysql.format(sql2, sqlInserts2);
-
+    createPost(sqlInserts){
+        console.log(sqlInserts+ 'annot1');
+        
+        if (sqlInserts.length === 4 ) {
+            let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
+            sql= mysql.format(sql, sqlInserts);
             return new Promise((resolve, reject) => {
-                console.log(sql1+ "début1");
-                console.log(sql1.annotation+"annotation1");
-                
-                    db.query(sql1, function(err, result){
-                        if (err) throw err;
-                        resolve({  message: "Post  avec photo créé avec succès" })
-                        console.log(sql1+ "sql1");
-                    })
-                
+                db.query(sql, function(err, result){
+                    if (err) throw err;
+                    resolve({  message: "Post  avec photo créé avec succès" })
+                    console.log(sql+ "sql1");
+
+                })
             })
-
-        // if (sqlInserts1  ) {
+        } else {
             
-        //     let sql1 = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
-        //     sql1= mysql.format(sql1, sqlInserts1);
-
-        //     let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
-        //     sql2 = mysql.format(sql2, sqlInserts2);
-        //     return new Promise((resolve, reject) => {
-        //         console.log(sql1+ "début1");
-        //         console.log(sql1.annotation+"annotation1");
-                
-        //             db.query(sql1, function(err, result){
-        //                 if (err) throw err;
-        //                 resolve({  message: "Post  avec photo créé avec succès" })
-        //                 console.log(sql1+ "sql1");
-        //             })
-                
-        //     })
-        // }else{
-        //     let sql2 = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
-        //     sql2 = mysql.format(sql2, sqlInserts2);
-        //     return new Promise((resolve, reject) => {
-        //         console.log(sql2+ "début2");
-        //             db.query(sql2, function(err, result){
-        //                 if (err) throw err;
-        //                 resolve({  message: "Post  sans photo créé avec succès" })
-        //                 console.log(sql2+ "sql2");
-        //             })
-        //     })
-        // }
+            let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+            sql = mysql.format(sql, sqlInserts);
+            return new Promise((resolve, reject) => {
+                db.query(sql, function(err, result){
+                    if (err) throw err;
+                    resolve({  message: "Post  sans photo créé avec succès" })
+                    console.log(sql+ "sql2");
+                })
+            })
+        }
+        
  
         // return new Promise((resolve, reject) => {
 
@@ -122,15 +97,7 @@ class PostsModels{
     
         //     })
         // })
-
-
-        
-
-            
-
-
-
-            
+     
 
     }
 
@@ -200,6 +167,9 @@ class PostsModels{
     deletePost(sqlInserts1 , sqlInserts2){
         let sql1 = 'SELECT * FROM post WHERE id = ?';
         sql1 = mysql.format(sql1, sqlInserts1);
+
+        let sql = 'DELETE FROM post WHERE id= ? AND user_id= ? AND post.image_adress IS NULL';
+        sql= mysql.format(sql1, sqlInserts1);
         return new Promise((resolve, reject) => {
 
             db.query(sql1, function(err, result){

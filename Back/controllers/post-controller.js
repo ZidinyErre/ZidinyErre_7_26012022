@@ -11,14 +11,7 @@ let postModels = new PostsModels();
 // CReate post marche pas totalement pour l'instant
 // async
 exports.createPost =  (req, res) => {
-    console.log(req.body.annotation + "controllerannot"); 
-    if(!req.body.annotation){
-        res.send({
-            status:false,
-            message: 'Veuillez remplir la partie commentaire de cette publication.'
-        })
-
-    }else if (req.files) {
+    if (req.files) {
 
 
         const {user_id, user_service, annotation } = req.body;
@@ -42,13 +35,13 @@ exports.createPost =  (req, res) => {
         image.mv(imagesUpload, function (err){
             if (err) return res.status(500).send(err);
 
-            let sqlInserts1 = [ user_id, user_service,  image.name, annotation];
-            console.log(sqlInserts1 + 'controller1');
+            let sqlInserts = [ user_id, user_service,  image.name, annotation];
+            console.log(sqlInserts + 'controller1');
             // if (!sqlInserts.image_adress) {
             //     sqlInserts = [user_id, user_service, annotation];
             // }
             
-            postModels.createPost(sqlInserts1)
+            postModels.createPost(sqlInserts)
 
             .then((response) => {
                 res.status(201).json(JSON.stringify(response))
@@ -61,11 +54,10 @@ exports.createPost =  (req, res) => {
     }else{
       
         const {user_id, user_service, annotation } = req.body;
-        console.log(req.body.annotation + "controllannot2");
-        let sqlInserts2 = [user_id, user_service, annotation];
-        console.log(sqlInserts2 + 'controller2');
+        let sqlInserts = [user_id, user_service, annotation];
+        console.log(sqlInserts + 'controller2');
 
-        postModels.createPost(sqlInserts2)
+        postModels.createPost(sqlInserts)
         .then((response) => {
             res.status(201).json(JSON.stringify(response))
         })
