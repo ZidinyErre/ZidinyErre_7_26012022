@@ -164,12 +164,12 @@ exports.deletePost = (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
     const userId = decodedToken.userId;
-    console.log(req.files + "req");
     let postId = req.params.id;
+    let sqlInserts1 = [postId];
     let sqlInserts2 = [postId , userId];
     console.log(postId);
     console.log(userId);
-    postModels.deletePost( sqlInserts2)
+    postModels.deletePost(sqlInserts1, sqlInserts2)
     .then((response) => {
         res.status(200).json(JSON.stringify({response}))
     })
@@ -177,7 +177,6 @@ exports.deletePost = (req, res) => {
         console.log(error);
         res.status(400).json({error})
     });
-
 }
 
 exports.likesPost = (req, res) => {
