@@ -134,7 +134,7 @@ class PostsModels{
         })
 
     }
-    updatePost(sqlInserts1 , sqlInserts2){
+    updatePost(sqlInserts1, sqlInserts2){
         let sql1 = 'SELECT * FROM post WHERE id = ?';
         sql1 = mysql.format(sql1, sqlInserts1);
         console.log('sql1'+sql1);
@@ -142,20 +142,26 @@ class PostsModels{
         return new Promise((resolve, reject) => {
             db.query(sql1, function(err, result){
                 if (err) throw err;
-                
-                if (sqlInserts2[3] == result[0].user_id){
-                    console.log('sqldél'+ sqlInserts2[3]);
-                    console.log('resl'+ result[0].user_id);
-                    let sql2 = "UPDATE  post SET  annotation = ?  , image_adress = ?  WHERE id = ? AND user_id = ? ";
+                console.log('yepas update' +  result[0].image_adress);
+                if (sqlInserts2[1] == result[0].user_id && !result[0].image_adress){
+                    
+                    let sql2 = "UPDATE  post    WHERE id = ? AND user_id = ? SET annotation = ?    ";
                     sql2 = mysql.format(sql2, sqlInserts2);
                     db.query(sql2, function(err, result) {
-                        console.log('sql2'+sql2);
+                        console.log('sql2 1'+sql2);
 
                         if (err) throw err;
-                        resolve({message : 'Post modifié avec succés !'})
+                        resolve({message : 'Post sans image modifié avec succés !'})
                     }) 
                 }else{
-                    reject({error : 'fonction de modification indisponible !'})
+                    let sql2 = "UPDATE  post  WHERE id = ? AND user_id = ? SET image_adress = ? , annotation = ?  ";
+                    sql2 = mysql.format(sql2, sqlInserts2);
+                    db.query(sql2, function(err, result) {
+                        console.log('sql2 2'+sql2);
+
+                        if (err) throw err;
+                        resolve({message : 'Post avec image modifié avec succés !'})
+                    }) 
                 }
                 
             })
@@ -165,7 +171,8 @@ class PostsModels{
     }    
     // SELECT * FROM groupomania.post WHERE id= 46  AND post.image_adress IS NULL
     // DELETE est bon je n'ai pas réussi a supprimer un post d'un autre user id à vérifier encore!!
-    // TODO Est ce que celui qui l'id 30 peut supprimer le post de l'id 32 par exemple
+    // Parcontre les nom d'image peuvent être stocké plusieurs fois dans la BDD mais qu'une fois sur serveur
+    // TODO Vérifier encore "Est ce que celui qui l'id 30 peut supprimer le post de l'id 32 par exemple"
     deletePost(sqlInserts1 , sqlInserts2){
         let sql1 = 'SELECT * FROM post WHERE id = ?';
         sql1 = mysql.format(sql1, sqlInserts1);

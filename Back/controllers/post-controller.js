@@ -103,58 +103,107 @@ exports.updatePost = (req, res) => {
     let userId = decodedToken.userId;
     let user_id = userId;
     let postId = req.params.id;
-    let dataImage = req.files;
-    let request = req.body;
+    let {  annotation } = req.body;
+    let sqlInserts1 = [postId];
+    
 
-
-    let { annotation, image_adress} = req.body; 
-    console.log(dataImage);
-    console.log(request);
-
-
-    // let image_adress;
-    let imagesUpload;
     if (!req.files) {
         res.send({
         status:false,
         message: 'Image non téléchargée'
         });
     }
-    image_adress = req.files.image_adress;
-    imagesUpload = path.join(__dirname , "//..//images//",image_adress.name );
-    if(image_adress){
-        res.send({
-            status: true,
-            message: 'File is uploaded',
-            data: {
-                name: image_adress.name,
-                mimetype: image_adress.mimetype,
-                size: image_adress.size
-            }
-        })
-    }
-    
-    console.log(image_adress);
-    // console.log(image.name);
 
-
-    let sqlInserts1 = [postId];
-    let sqlInserts2 = [annotation , image_adress.name , postId, user_id   ];
-    console.log(sqlInserts2);
-
-    
-    image_adress.mv(imagesUpload, function (err){
-        if (err) return res.status(500).send(err);
+    if (req.files) {
+        let image;
+        let imagesUpload;
         
+        
+        image = req.files.image_adress;
+        console.log(image);
+
+        imagesUpload = path.join(__dirname , "//..//images//",image.name );
+
+
+        console.log(imagesUpload);
+        console.log(__dirname);
+        console.log(typeof(image));
+        // .mv permet de mettre le req.files ou on veut
+        image.mv(imagesUpload, function (err){
+            if (err) return res.status(500).send(err);
+
+            let sqlInserts2 = [ postId , user_id,  image.name, annotation];
+            console.log(sqlInserts2 + 'controller1');
+            // if (!sqlInserts.image_adress) {
+            //     sqlInserts = [user_id, user_service, annotation];
+            // }
+            
+            postModels.updatePost(sqlInserts1,sqlInserts2)
+
+            .then((response) => {
+                res.status(201).json(JSON.stringify(response))
+            })
+            .catch( (error) => {
+                    res.status(400).json(error)
+            });
+
+        })
+    }else{
+        // let {user_id, user_service, annotation } = req.body;
+        let sqlInserts2 = [postId, user_id, annotation];
+        console.log(sqlInserts2 + 'controller2');
+
         postModels.updatePost(sqlInserts1,sqlInserts2)
         .then((response) => {
-            res.status(200).json(JSON.stringify({response}))
+            res.status(201).json(JSON.stringify(response))
         })
-        .catch((error) =>{
-            console.log(error);
-            res.status(400).json({error})
+        .catch( (error) => {
+                res.status(400).json(error)
         });
-    })
+    }
+
+
+    
+    
+
+    // let image_adress;
+
+    // let imagesUpload;
+    // if (!req.files) {
+    //     res.send({
+    //     status:false,
+    //     message: 'Image non téléchargée'
+    //     });
+    // }
+    // image_adress = req.files.image_adress;
+    // imagesUpload = path.join(__dirname , "//..//images//",image_adress.name );
+
+    // if(image_adress){
+    //     res.send({
+    //         status: true,
+    //         message: 'File is uploaded',
+    //         data: {
+    //             name: image_adress.name,
+    //             mimetype: image_adress.mimetype,
+    //             size: image_adress.size
+    //         }
+    //     })
+    // }
+    
+
+    
+    // image_adress.mv(imagesUpload, function (err){
+    //     if (err) return res.status(500).send(err);
+        
+    //     postModels.updatePost(sqlInserts1,sqlInserts2)
+    //     .then((response) => {
+    //         res.status(200).json(JSON.stringify({response}))
+    //     })
+    //     .catch((error) =>{
+    //         console.log(error);
+    //         res.status(400).json({error})
+    //     });
+    // })
 
     
 }
