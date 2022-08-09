@@ -134,38 +134,105 @@ class PostsModels{
         })
 
     }
-    updatePost(sqlInserts1, sqlInserts2){
-        let sql1 = 'SELECT * FROM post WHERE id = ?';
-        sql1 = mysql.format(sql1, sqlInserts1);
-        console.log('sql1'+sql1);
+    // The connect() method accepts a callback function that has the err argument which provides the detailed error if any error occurred.
+    // db.query lui va plus lancé une requête avec une commande sql
+    updatePost(id, data){
 
-        return new Promise((resolve, reject) => {
-            db.query(sql1, function(err, result){
-                if (err) throw err;
-                console.log('yepas update' +  result[0].image_adress);
-                if (sqlInserts2[1] == result[0].user_id && !result[0].image_adress){
-                    
-                    let sql2 = "UPDATE  post    WHERE id = ? AND user_id = ? SET annotation = ?    ";
-                    sql2 = mysql.format(sql2, sqlInserts2);
-                    db.query(sql2, function(err, result) {
-                        console.log('sql2 1'+sql2);
+        
 
-                        if (err) throw err;
-                        resolve({message : 'Post sans image modifié avec succés !'})
-                    }) 
-                }else{
-                    let sql2 = "UPDATE  post  WHERE id = ? AND user_id = ? SET image_adress = ? , annotation = ?  ";
-                    sql2 = mysql.format(sql2, sqlInserts2);
-                    db.query(sql2, function(err, result) {
-                        console.log('sql2 2'+sql2);
+        const token = req.headers.authorization.split(' ')[1];
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
+        let userId = decodedToken.userId;
+        let user_id = userId;
+        // let postId = req.params.id;
+        // let {  annotation } = req.body;
+    
+        if (!req.files) {
+            res.send({
+            status:false,
+            message: 'Image non téléchargée'
+            });
+        }
+        let image;
+        let imagesUpload;
+        
+        
+        image = req.files.image_adress;
+        console.log(image);
 
-                        if (err) throw err;
-                        resolve({message : 'Post avec image modifié avec succés !'})
-                    }) 
-                }
+        imagesUpload = path.join(__dirname , "//..//images//",image.name );
+
+
+        console.log(imagesUpload);
+        console.log(__dirname);
+        console.log(typeof(image));
+
+        return db.connect(error => {
+            if (error) throw error;
+            
+
+            // .mv permet de mettre le req.files ou on veut
+            image.mv(imagesUpload, function (err){
+                if (err) return res.status(500).send(err);
+
                 
+                return db.promise().query(
+                    "UPDATE  post   SET image_adress= ? , annotation = ? WHERE id = ? AND user_id = ? " , 
+                    [image.name, data.annotation,id, user_id] 
+                ) 
+                .then(response => response)
+                .catch(error => {throw error});
+                
+
             })
+            
         })
+
+
+        
+        // if (req.files) {
+     
+        // }else{
+        //     // let {user_id, user_service, annotation } = req.body;
+        //     let sqlInserts2 = [postId, user_id, annotation];
+        //     console.log(sqlInserts2 + 'controller2');
+    
+           
+        // }
+    
+
+        // let sql1 = 'SELECT * FROM post WHERE id = ?';
+        // sql1 = mysql.format(sql1, sqlInserts1);
+        // console.log('sql1'+sql1);
+
+        // return new Promise((resolve, reject) => {
+        //     db.query(sql1, function(err, result){
+        //         if (err) throw err;
+        //         console.log('yepas update' +  result[0].image_adress);
+        //         if (sqlInserts2[1] == result[0].user_id && !result[0].image_adress){
+                    
+        //             let sql2 = "UPDATE  post    WHERE id = ? AND user_id = ? SET annotation = ?    ";
+        //             sql2 = mysql.format(sql2, sqlInserts2);
+        //             db.query(sql2, function(err, result) {
+        //                 console.log('sql2 1'+sql2);
+
+        //                 if (err) throw err;
+        //                 resolve({message : 'Post sans image modifié avec succés !'})
+        //             }) 
+        //         }else{
+                    
+        //             let sql2 = "UPDATE  post  WHERE id = ? AND user_id = ? SET image_adress = ? , annotation = ?  ";
+        //             sql2 = mysql.format(sql2, sqlInserts2);
+        //             db.query(sql2, function(err, result) {
+        //                 console.log('sql2 2'+sql2);
+
+        //                 if (err) throw err;
+        //                 resolve({message : 'Post avec image modifié avec succés !'})
+        //             }) 
+        //         }
+                
+        //     })
+        // })
     
 
     }    

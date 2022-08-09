@@ -98,72 +98,15 @@ exports.getOnePost = (req, res) => {
 
 // Modifie une  Publication
 exports.updatePost = (req, res) => {
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
-    let userId = decodedToken.userId;
-    let user_id = userId;
-    let postId = req.params.id;
-    let {  annotation } = req.body;
-    let sqlInserts1 = [postId];
     
 
-    if (!req.files) {
-        res.send({
-        status:false,
-        message: 'Image non téléchargée'
-        });
-    }
-
-    if (req.files) {
-        let image;
-        let imagesUpload;
-        
-        
-        image = req.files.image_adress;
-        console.log(image);
-
-        imagesUpload = path.join(__dirname , "//..//images//",image.name );
-
-
-        console.log(imagesUpload);
-        console.log(__dirname);
-        console.log(typeof(image));
-        // .mv permet de mettre le req.files ou on veut
-        image.mv(imagesUpload, function (err){
-            if (err) return res.status(500).send(err);
-
-            let sqlInserts2 = [ postId , user_id,  image.name, annotation];
-            console.log(sqlInserts2 + 'controller1');
-            // if (!sqlInserts.image_adress) {
-            //     sqlInserts = [user_id, user_service, annotation];
-            // }
-            
-            postModels.updatePost(sqlInserts1,sqlInserts2)
-
-            .then((response) => {
-                res.status(201).json(JSON.stringify(response))
-            })
-            .catch( (error) => {
-                    res.status(400).json(error)
-            });
-
-        })
-    }else{
-        // let {user_id, user_service, annotation } = req.body;
-        let sqlInserts2 = [postId, user_id, annotation];
-        console.log(sqlInserts2 + 'controller2');
-
-        postModels.updatePost(sqlInserts1,sqlInserts2)
-        .then((response) => {
-            res.status(201).json(JSON.stringify(response))
-        })
-        .catch( (error) => {
-                res.status(400).json(error)
-        });
-    }
-
-
-    
+    postModels.updatePost(req.params.id, req.body)
+    .then((response) => {
+        res.status(200).json(JSON.stringify(response))
+    })
+    .catch( (error) => {
+            res.status(400).json(error)
+    });
     
 
     // let image_adress;
@@ -314,18 +257,3 @@ exports.likesPost = (req, res) => {
 //     })
 // }; 
 
-// exports.updatePost = (req, res) => {
-// }
-
-
-
-
-
-
-
-
-// exports.lovesPost = (req, res) => {
-// }
-
-// exports.congratsPost = (req, res) => {
-// }
