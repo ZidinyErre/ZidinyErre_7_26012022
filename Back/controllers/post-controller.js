@@ -100,7 +100,7 @@ exports.getOnePost = (req, res) => {
 exports.updatePost = (req, res) => {
     
 
-    postModels.updatePost(req.params.id, req.body)
+    postModels.updatePost(req.params.id, req.body, req)
     .then((response) => {
         res.status(200).json(JSON.stringify(response))
     })

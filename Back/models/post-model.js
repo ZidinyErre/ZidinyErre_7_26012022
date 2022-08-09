@@ -4,6 +4,9 @@ const fs = require('fs');
 const {join, resolve} = require('path');
 const { reject } = require("lodash");
 const { rejects } = require("assert");
+const jwt = require('jsonwebtoken');
+const path = require("path");
+
 
 // Il faut vérifier que chaque partie marche avec et sans images !!!
 
@@ -136,49 +139,50 @@ class PostsModels{
     }
     // The connect() method accepts a callback function that has the err argument which provides the detailed error if any error occurred.
     // db.query lui va plus lancé une requête avec une commande sql
-    updatePost(id, data){
+    updatePost(id, data, request){
 
         
 
-        const token = req.headers.authorization.split(' ')[1];
+        const token = request.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
         let userId = decodedToken.userId;
         let user_id = userId;
+        let file = request.files;
+        file = Object.values(file);
         // let postId = req.params.id;
         // let {  annotation } = req.body;
-    
-        if (!req.files) {
+        console.log( file[0].name + "files");
+        if (!file[0]) {
             res.send({
             status:false,
             message: 'Image non téléchargée'
             });
         }
-        let image;
+        // let image;
         let imagesUpload;
         
         
-        image = req.files.image_adress;
-        console.log(image);
+        // image = file[0].image_adress;
+        // console.log(image + "image");
 
-        imagesUpload = path.join(__dirname , "//..//images//",image.name );
+        imagesUpload = path.join(__dirname , "//..//images//",file[0].name );
 
 
         console.log(imagesUpload);
         console.log(__dirname);
-        console.log(typeof(image));
 
         return db.connect(error => {
             if (error) throw error;
             
 
             // .mv permet de mettre le req.files ou on veut
-            image.mv(imagesUpload, function (err){
+            file[0].mv(imagesUpload, function (err){
                 if (err) return res.status(500).send(err);
 
                 
                 return db.promise().query(
                     "UPDATE  post   SET image_adress= ? , annotation = ? WHERE id = ? AND user_id = ? " , 
-                    [image.name, data.annotation,id, user_id] 
+                    [file[0].name, data.annotation,id, user_id] 
                 ) 
                 .then(response => response)
                 .catch(error => {throw error});
