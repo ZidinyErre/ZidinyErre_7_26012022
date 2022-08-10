@@ -139,63 +139,23 @@ class PostsModels{
     }
     // The connect() method accepts a callback function that has the err argument which provides the detailed error if any error occurred.
     // db.query lui va plus lancé une requête avec une commande sql
-    updatePost(id, data, request){
+    updatePost( sqlInserts){
 
         
 
-        const token = request.headers.authorization.split(' ')[1];
-        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
-        let userId = decodedToken.userId;
-        let user_id = userId;
-        let file = request.files;
-        file = Object.values(file);
-        // let postId = req.params.id;
-        // let {  annotation } = req.body;
-        console.log( file[0].name + "files");
-        if (!file[0]) {
-            res.send({
-            status:false,
-            message: 'Image non téléchargée'
-            });
-        }
-        // let image;
-        let imagesUpload;
         
-        
-        // image = file[0].image_adress;
-        // console.log(image + "image");
-
-        imagesUpload = path.join(__dirname , "//..//images//",file[0].name );
-
-
-        console.log(imagesUpload);
-        console.log(__dirname);
-
             
 
-            // .mv permet de mettre le req.files ou on veut
-            file[0].mv(imagesUpload, function (err){
-                if (err) return res.status(500).send(err);
 
-                return new Promise((resolve, reject) =>{
-                    let sql = "UPDATE  post   SET image_adress= ? , annotation = ? WHERE id = ? AND user_id = ? " ;
-                    let sqlInserts =  [file[0].name, data.annotation,id, user_id];
-                    sql = mysql.format(sql,sqlInserts);
-                    db.query(sql, function(err,result){
-                        if (err) return reject({err});
-                        
-                         resolve({message:'Publication modifié' + result})
-                    })
+            return new Promise((resolve, reject) =>{
+                let sql = "UPDATE  post   SET image_adress= ? , annotation = ? WHERE id = ? AND user_id = ? " ;
+                sql = mysql.format(sql,sqlInserts);
+                db.query(sql, function(err,result){
+                    if (err) return reject({err});
+                    
+                     resolve({message:'Publication modifié' + result})
                 })
-                 
-                
-                
-
             })
-            
-
-
-        
         // if (req.files) {
      
         // }else{
