@@ -99,15 +99,17 @@ exports.getOnePost = (req, res) => {
 // Modifie une  Publication
 exports.updatePost = (req, res) => {
     
-
-    postModels.updatePost(req.params.id, req.body, req)
+    let id = req.params.id;
+    let data = req.body;
+    let request = req;
+    postModels.updatePost(id, data, request)
     .then((response) => {
-        res.status(200).json(JSON.stringify(response))
+        res.status(200).json(JSON.stringify({response}))
+
     })
     .catch( (error) => {
-            res.status(400).json(error)
+        res.status(400).json({error})
     });
-    
 
     // let image_adress;
 

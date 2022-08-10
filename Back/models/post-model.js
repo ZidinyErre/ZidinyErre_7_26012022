@@ -171,26 +171,28 @@ class PostsModels{
         console.log(imagesUpload);
         console.log(__dirname);
 
-        return db.connect(error => {
-            if (error) throw error;
             
 
             // .mv permet de mettre le req.files ou on veut
             file[0].mv(imagesUpload, function (err){
                 if (err) return res.status(500).send(err);
 
+                return new Promise((resolve, reject) =>{
+                    let sql = "UPDATE  post   SET image_adress= ? , annotation = ? WHERE id = ? AND user_id = ? " ;
+                    let sqlInserts =  [file[0].name, data.annotation,id, user_id];
+                    sql = mysql.format(sql,sqlInserts);
+                    db.query(sql, function(err,result){
+                        if (err) return reject({err});
+                        
+                         resolve({message:'Publication modifié' + result})
+                    })
+                })
+                 
                 
-                return db.promise().query(
-                    "UPDATE  post   SET image_adress= ? , annotation = ? WHERE id = ? AND user_id = ? " , 
-                    [file[0].name, data.annotation,id, user_id] 
-                ) 
-                .then(response => response)
-                .catch(error => {throw error});
                 
 
             })
             
-        })
 
 
         
