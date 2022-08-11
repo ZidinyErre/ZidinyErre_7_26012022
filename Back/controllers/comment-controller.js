@@ -38,3 +38,5 @@ exports.deleteComment = (req, res) => {
         res.status(400).json({err})
     });
 }
+
+//TODO Faire les likes ici aussi 

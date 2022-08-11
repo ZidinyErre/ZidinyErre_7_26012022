@@ -141,21 +141,35 @@ class PostsModels{
     // db.query lui va plus lancé une requête avec une commande sql
     updatePost( sqlInserts){
 
+        console.log(sqlInserts + "début");
         
-
-        
-            
-
-
+        if (sqlInserts.lenght === 4) {
             return new Promise((resolve, reject) =>{
                 let sql = "UPDATE  post   SET image_adress= ? , annotation = ? WHERE id = ? AND user_id = ? " ;
                 sql = mysql.format(sql,sqlInserts);
                 db.query(sql, function(err,result){
                     if (err) return reject({err});
                     
-                     resolve({message:'Publication modifié' + result})
+                     resolve({message:'Publication avec image modifié' + result})
                 })
             })
+        } else {
+            return new Promise((resolve, reject) =>{
+                let sql = "UPDATE  post   SET  annotation = ? WHERE id = ? AND user_id = ? " ;
+                sql = mysql.format(sql,sqlInserts);
+                console.log(sql + "sql2");
+                db.query(sql, function(err,result){
+                    if (err) return reject({err});
+                    
+                     resolve({message:'Publication sans image modifié' + result})
+                })
+            })
+        }
+        
+            
+
+
+            
         // if (req.files) {
      
         // }else{
@@ -243,19 +257,17 @@ class PostsModels{
 
     likesPost(sqlInserts, liked){
         let sql1 = 'UPDATE post SET user_like = ?, like_count = like_count+1 WHERE id = ?';
-        sql1 = mysql.format(sqlInserts, sql1);
+        sql1 = mysql.format(sql1, sqlInserts );
         let sql2 = 'UPDATE post SET user_like = ?, like_count = like_count-1 WHERE id = ?';
-        sql2 = mysql.format(sqlInserts, sql2);
+        sql2 = mysql.format(sql2,sqlInserts );
         return new Promise((resolve,reject) =>{
             console.log(liked);
             console.log(sql1);
             if (liked === true) {
                 db.query(sql1, function(err, result){
-                    
-                    if (err) return reject({err : "La Fonction d'ajout de like a échoué"});
+                    if (err) return reject({err : "La Fonction d'ajout de like a échoué" + err});
                     resolve({message: 'Like ajouté'})
-                    console.log(err);
-
+                console.log(sql1 + "222");
                 })
                 
             } else {
