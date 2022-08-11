@@ -38,6 +38,31 @@ class CommentsModels{
         })
     }
 
+    likescomment(sqlInserts,liked){
+        let sql1 = 'UPDATE comment SET  user_comment_like = ?,  like_comment_count =  like_comment_count+1 WHERE id = ?';
+        sql1 = mysql.format(sql1, sqlInserts );
+        let sql2 = 'UPDATE comment SET user_comment_like = ?,  like_comment_count =  like_comment_count-1 WHERE id = ?';
+        sql2 = mysql.format(sql2,sqlInserts );
+        return new Promise((resolve,reject) =>{
+            console.log(liked);
+            console.log(sql1);
+            if (liked === true) {
+                db.query(sql1, function(err, result){
+                    if (err) return reject({err : "La Fonction d'ajout de like a échoué" + err});
+                    resolve({message: 'Like commentaire ajouté'})
+                console.log(sql1 + "222");
+                })
+                
+            } else {
+                db.query(sql2, function(err, result){
+                    if (err) return reject({err : "La Fonction de suppression de like a échoué"});
+                    resolve({message: 'Like commentaire supprimé'})
+                })
+            }
+           
+        })
+    }
+
 }
 
 module.exports = CommentsModels;

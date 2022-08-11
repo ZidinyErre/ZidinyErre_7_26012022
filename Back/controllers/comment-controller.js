@@ -39,4 +39,19 @@ exports.deleteComment = (req, res) => {
     });
 }
 
+exports.likescomment = (req, res) => {
+    let user_comment_like = req.body.user_id;
+    let commentId = req.params.id;
+    let liked = req.body.liked;
+    let sqlInserts = [user_comment_like,commentId];
+
+    commentModels.likescomment(sqlInserts,liked)
+    .then((result) => {
+        res.status(200).json(JSON.stringify({result}));
+    })
+    .catch((err) =>{
+        res.status(400).json({err})
+    });
+}
+
 //TODO Faire les likes ici aussi 
