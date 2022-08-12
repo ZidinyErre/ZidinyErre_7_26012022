@@ -1,22 +1,64 @@
 const db = require("../config/db");
 const bcrypt = require('bcrypt');
+const path = require("path");
 const UserModels = require("../models/user-model");
 require('dotenv').config();
 
 let userModels = new UserModels();
 
+//TODO refaire le delete avec les image et voir si ça affecte getall et getOne
+
 exports.signup = async (req, res) => {
-        const {nom, prenom, email, password, service, role} = req.body;
-        let hashedPassword = await bcrypt.hash(password,10);
-        let sqlInserts = {nom : nom, prenom : prenom, email : email, password : hashedPassword, service : service, role : role};
-        userModels.signup(sqlInserts)
-                .then((result) => {
-                        res.status(201).json(JSON.stringify({result}));
-                        // res.status(201).json({result});
+
+        if (req.files) {
+                console.log(req.files + "files");
+                console.log(req.files.user_image_adress + "image");
+                const {nom, prenom, email, password, service, role} = req.body;
+                let hashedPassword = await bcrypt.hash(password,10);
+                let image;
+                let imagesUpload;
+        
+                image = req.files.user_image_adress;
+                imagesUpload = path.join(__dirname , "//..//images//",image.name );
+                console.log(image + "côté user");
+                console.log(imagesUpload);
+                console.log(__dirname);
+                console.log(typeof(image));
+                // .mv permet de mettre le req.files ou on veut
+                image.mv(imagesUpload, function (err){
+                    if (err) return res.status(500).send(err);
+        
+                    let sqlInserts = {nom : nom, prenom : prenom, email : email, password : hashedPassword, user_image_adress : image.name, service : service, role : role};
+
+                    console.log(sqlInserts + 'controller1');
+
+                    userModels.signup(sqlInserts)
+                        .then((result) => {
+                                res.status(201).json(JSON.stringify({result}));
+                                // res.status(201).json({result});
+                        })
+                        .catch((err) =>{
+                                res.status(400).json({err});
+                        })    
+        
                 })
-                .catch((err) =>{
-                        res.status(400).json({err});
-                });
+
+                
+        } else {
+                const {nom, prenom, email, password, service, role} = req.body;
+                let hashedPassword = await bcrypt.hash(password,10);
+                let sqlInserts = {nom : nom, prenom : prenom, email : email, password : hashedPassword, service : service, role : role};
+                userModels.signup(sqlInserts)
+                        .then((result) => {
+                                res.status(201).json(JSON.stringify({result}));
+                                // res.status(201).json({result});
+                        })
+                        .catch((err) =>{
+                                res.status(400).json({err});
+                        })    
+        }
+
+        ;
 };
     
 exports.login = (req, res) => {

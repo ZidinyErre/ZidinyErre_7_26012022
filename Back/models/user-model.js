@@ -5,6 +5,12 @@ const mysql = require('mysql');
 require('dotenv').config();
 
 //TODO Mets les images ici aussi
+//    "nom" : "Roronoa", 
+// "prenom" : "Zoro",
+// "email" : "roronoazoro@gmail.com",
+// "password": "ro20,;",
+// "service" : "Lead Developpeur",
+// "role" : "average user "
 
 class UserModels{
     constructor(){

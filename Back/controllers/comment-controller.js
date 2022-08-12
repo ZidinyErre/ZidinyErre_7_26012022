@@ -54,4 +54,3 @@ exports.likescomment = (req, res) => {
     });
 }
 
-//TODO Faire les likes ici aussi 
