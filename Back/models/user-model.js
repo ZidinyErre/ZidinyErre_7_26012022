@@ -12,6 +12,7 @@ require('dotenv').config();
 // "service" : "Lead Developpeur",
 // "role" : "average user "
 
+// TODO J'ai peut être trop augmenté le temps de login
 class UserModels{
     constructor(){
 
@@ -46,7 +47,7 @@ class UserModels{
                             token : jwt.sign(
                                 {userId: result[0].id},
                                 process.env.ACCESS_TOKEN_SECRET,
-                                {expiresIn: '60s'}
+                                {expiresIn: '300s'}
                             ),
                             refreshToken : jwt.sign(
                                 {userId: result[0].id},

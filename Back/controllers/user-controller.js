@@ -7,6 +7,7 @@ require('dotenv').config();
 let userModels = new UserModels();
 
 //TODO refaire le delete avec les image et voir si ça affecte getall et getOne
+// TODO Vérifier en back  si côté post les user.service sont bon!
 
 exports.signup = async (req, res) => {
 
