@@ -52,8 +52,7 @@ class PostsModels{
     createPost(sqlInserts){
         console.log(sqlInserts+ 'annot1');
         
-        if (sqlInserts.length === 4 ) {
-            let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
+        let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? , image_adress = ? ,  annotation = ?';
             sql= mysql.format(sql, sqlInserts);
             return new Promise((resolve, reject) => {
                 db.query(sql, function(err, result){
@@ -63,18 +62,20 @@ class PostsModels{
 
                 })
             })
-        } else {
+        // if (sqlInserts.length === 4 ) {
             
-            let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
-            sql = mysql.format(sql, sqlInserts);
-            return new Promise((resolve, reject) => {
-                db.query(sql, function(err, result){
-                    if (err) throw err;
-                    resolve({  message: "Post  sans photo créé avec succès" })
-                    console.log(sql+ "sql2");
-                })
-            })
-        }
+        // } else {
+            
+        //     let sql = 'INSERT INTO post  SET user_id = ? , user_service = ? ,   annotation = ?';
+        //     sql = mysql.format(sql, sqlInserts);
+        //     return new Promise((resolve, reject) => {
+        //         db.query(sql, function(err, result){
+        //             if (err) throw err;
+        //             resolve({  message: "Post  sans photo créé avec succès" })
+        //             console.log(sql+ "sql2");
+        //         })
+        //     })
+        // }
         
  
         // return new Promise((resolve, reject) => {

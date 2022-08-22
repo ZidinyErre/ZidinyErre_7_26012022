@@ -1,8 +1,8 @@
 const express = require('express');
 const path = require('path');
-const lodash = require('lodash');
-const fileUpload = require('express-fileupload');
-const morgan = require('morgan');
+// const lodash = require('lodash');
+// const fileUpload = require('express-fileupload');
+// const morgan = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 let corsOptions = {
@@ -19,9 +19,9 @@ const refreshRoutes = require('./routes/refresh-route');
 
 // app.use(fileUpload());
 
-app.use(fileUpload({
-    createParentPath: true
-}));
+// app.use(fileUpload({
+//     createParentPath: true
+// }));
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -54,7 +54,7 @@ app.use('/api/', refreshRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(express.static('images'));
  
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 
 
 module.exports = app;

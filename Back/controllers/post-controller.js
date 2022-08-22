@@ -10,61 +10,36 @@ let postModels = new PostsModels();
 // Pourquoi tu as mis async?
 // CReate post marche pas totalement pour l'instant
 // async
+//TODO est ce que image getall getone s'affiche bien
 exports.createPost =  (req, res) => {
-    if (req.files) {
 
+    const {user_id, user_service, annotation } = req.body;
+    const image = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
 
-        const {user_id, user_service, annotation } = req.body;
-        let image;
-        let imagesUpload;
-        
-        // if (!req.files) {
-        //     res.send({
-        //     status:false,
-        //     message: 'Image non téléchargée'
-        //     });
-        // }
+    let sqlInserts = [ user_id, user_service, image , annotation];
+    
+    postModels.createPost(sqlInserts)
 
-        image = req.files.image_adress;
-        imagesUpload = path.join(__dirname , "//..//images//",image.name );
-        console.log(image);
-        console.log(imagesUpload);
-        console.log(__dirname);
-        console.log(typeof(image));
-        // .mv permet de mettre le req.files ou on veut
-        image.mv(imagesUpload, function (err){
-            if (err) return res.status(500).send(err);
+    .then((response) => {
+        res.status(201).json(JSON.stringify(response))
+    })
+    .catch( (error) => {
+            res.status(400).json(error)
+    });
 
-            let sqlInserts = [ user_id, user_service,  image.name, annotation];
-            console.log(sqlInserts + 'controller1');
-            // if (!sqlInserts.image_adress) {
-            //     sqlInserts = [user_id, user_service, annotation];
-            // }
-            
-            postModels.createPost(sqlInserts)
+    
+        // const {user_id, user_service, annotation } = req.body;
+        // let sqlInserts = [user_id, user_service, annotation];
+        // console.log(sqlInserts + 'controller2');
 
-            .then((response) => {
-                res.status(201).json(JSON.stringify(response))
-            })
-            .catch( (error) => {
-                    res.status(400).json(error)
-            });
+        // postModels.createPost(sqlInserts)
+        // .then((response) => {
+        //     res.status(201).json(JSON.stringify(response))
+        // })
+        // .catch( (error) => {
+        //         res.status(400).json(error)
+        // });
 
-        })
-    }else{
-      
-        const {user_id, user_service, annotation } = req.body;
-        let sqlInserts = [user_id, user_service, annotation];
-        console.log(sqlInserts + 'controller2');
-
-        postModels.createPost(sqlInserts)
-        .then((response) => {
-            res.status(201).json(JSON.stringify(response))
-        })
-        .catch( (error) => {
-                res.status(400).json(error)
-        });
-    }
     
 }; 
 
