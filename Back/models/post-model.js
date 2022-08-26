@@ -142,6 +142,18 @@ class PostsModels{
     // db.query lui va plus lancé une requête avec une commande sql
     updatePost( sqlInserts){
 
+        // console.log(sqlInserts + "début");
+        // return new Promise((resolve, reject) =>{
+        //     let sql = "UPDATE  post   SET  annotation = ? WHERE id = ? AND user_id = ? " ;
+        //     sql = mysql.format(sql,sqlInserts);
+        //     db.query(sql, function(err,result){
+        //         console.log(sql + "updatemodel");
+        //         if (err) return reject({err});
+                
+        //          resolve({message:'Publication sans image modifié' })
+        //     })
+        // })
+
         console.log(sqlInserts + "début");
         return new Promise((resolve, reject) =>{
             let sql = "UPDATE  post   SET image_adress= ? , annotation = ? WHERE id = ? AND user_id = ? " ;
