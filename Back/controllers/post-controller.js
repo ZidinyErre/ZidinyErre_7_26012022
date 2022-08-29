@@ -73,7 +73,31 @@ exports.getOnePost = (req, res) => {
 
 // Modifie une  Publication
 exports.updatePost = (req, res) => {
-
+    console.log(req.file + "file");
+    console.log(req.files + "files");
+        let postId = req.params.id;
+        // Peut être que cette partie la sert à rien
+        const token = req.headers.authorization.split(' ')[1];
+        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
+        let userId = decodedToken.userId;
+        // 
+    
+        const {user_id, annotation } = req.body;
+        const image = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
+    
+        console.log(req.file + "file1");
+    
+        let sqlInserts =  [image,  annotation, postId, userId];
+    
+        postModels.updatePost( sqlInserts)
+            .then((response) => {
+                res.status(200).json(JSON.stringify({response}))
+            })
+            .catch( (error) => {
+                res.status(400).json({error})
+            });
+            console.log(req.file + "file2");
+    
     // let postId = req.params.id;
     // // Peut être que cette partie la sert à rien
     // const token = req.headers.authorization.split(' ')[1];
@@ -94,30 +118,6 @@ exports.updatePost = (req, res) => {
     //         res.status(400).json({error})
     //     });
 
-
-    // je sais pas quoi sert id la
-    let postId = req.params.id;
-    // Peut être que cette partie la sert à rien
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
-    let userId = decodedToken.userId;
-    // 
-
-    const {user_id, annotation } = req.body;
-    const image = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
-
-    console.log(req.file + "file1");
-
-    let sqlInserts =  [image,  annotation, postId, userId];
-
-    postModels.updatePost( sqlInserts)
-        .then((response) => {
-            res.status(200).json(JSON.stringify({response}))
-        })
-        .catch( (error) => {
-            res.status(400).json({error})
-        });
-        console.log(req.file + "file2");
 
 }
 

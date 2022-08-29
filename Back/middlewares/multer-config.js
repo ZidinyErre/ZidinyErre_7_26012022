@@ -27,17 +27,28 @@ const MIME_TYPES = {
     'image/jpeg': 'jpg',
     'image/png': 'png',
 };
+    
 
 const storage = multer.diskStorage({
+
+    
+
     destination : (req, file, callback) => {
+        
         callback(null , 'images');
     },
     filename : (req, file, callback) => {
         const extPath = path.extname(`images/${file.originalname}`);
         const name = file.fieldname.split(' ').join('_').split(extPath).join('');
         const extension = MIME_TYPES[file.mimetype];
+        console.log(extPath + "extPath1");
+        console.log(name + "name1");
+        console.log(extension + "extension1");
         callback(null, `${name + Date.now()}.${extension}`);
+        
+
     }
+    
 });
 
 // module.exports = multer({storage : storage});

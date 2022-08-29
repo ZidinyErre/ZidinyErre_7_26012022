@@ -156,7 +156,7 @@ class PostsModels{
 
         console.log(sqlInserts + "début");
         return new Promise((resolve, reject) =>{
-            let sql = "UPDATE  post   SET image_adress= ? , annotation = ? WHERE id = ? AND user_id = ? " ;
+            let sql = 'UPDATE  post   SET image_adress = ? , annotation = ? WHERE id = ? AND user_id = ? ';
             sql = mysql.format(sql,sqlInserts);
             db.query(sql, function(err,result){
                 console.log(sql + "updatemodel");
@@ -165,9 +165,6 @@ class PostsModels{
                  resolve({message:'Publication avec image modifié' + result})
             })
         })
-    
-
-
     }    
     // SELECT * FROM groupomania.post WHERE id= 46  AND post.image_adress IS NULL
     // DELETE est bon je n'ai pas réussi a supprimer un post d'un autre user id à vérifier encore!!
