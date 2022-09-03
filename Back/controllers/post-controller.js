@@ -15,6 +15,7 @@ exports.createPost =  (req, res) => {
 
     const {user_id, user_service, annotation } = req.body;
     const image = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
+    console.log(image + "contr image");
 
     let sqlInserts = [ user_id, user_service, image , annotation];
     
@@ -81,11 +82,11 @@ exports.updatePost = (req, res) => {
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
         let userId = decodedToken.userId;
         // 
-    
+        
         const {user_id, annotation } = req.body;
         const image = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
     
-        console.log(req.file + "file1");
+        console.log(sqlInserts + "file1");
     
         let sqlInserts =  [image,  annotation, postId, userId];
     
@@ -96,7 +97,7 @@ exports.updatePost = (req, res) => {
             .catch( (error) => {
                 res.status(400).json({error})
             });
-            console.log(req.file + "file2");
+            console.log(sqlInserts + "file2");
     
     // let postId = req.params.id;
     // // Peut être que cette partie la sert à rien
