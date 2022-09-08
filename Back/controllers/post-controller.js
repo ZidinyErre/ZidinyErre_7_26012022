@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const path = require("path");
 const PostsModels = require('../models/post-model');
 require('dotenv').config();
+// const multer = require('../middlewares/multer-config');
+// const multerUpload = multer.single('image_adress');
 
 let postModels = new PostsModels();
 
@@ -87,6 +89,17 @@ exports.updatePost = (req, res) => {
         const image = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
     
         console.log(sqlInserts + "file1");
+
+        // multerUpload( req, res , function(err){
+        //     if (err instanceof multer.MulterError ) {
+        //         res.status(400).json({err})
+        //         console.log(err + "multer");
+        //     } else if (err) {
+        //         res.status(400).json({err})
+        //         console.log(err + "non multer");
+
+        //     }
+        // })
     
         let sqlInserts =  [image,  annotation, postId, userId];
     
