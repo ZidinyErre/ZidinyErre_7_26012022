@@ -51,8 +51,8 @@ app.use('/api/', refreshRoutes);
 
 
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use(express.static('images'));
+app.use( express.static(path.join(__dirname, 'images')));
+// app.use(express.static('images'));
  
 // app.use(morgan('dev'));
 

@@ -156,7 +156,7 @@ class PostsModels{
 
         console.log(sqlInserts + "début");
         return new Promise((resolve, reject) =>{
-            let sql = 'UPDATE  post   SET image_adress = ? , annotation = ? WHERE id = ? AND user_id = ? ';
+            let sql = 'UPDATE  post   SET  image_adress = ? ,annotation = ? WHERE id = ? AND user_id = ?  ';
             sql = mysql.format(sql,sqlInserts);
             db.query(sql, function(err,result){
                 console.log(sql + "updatemodel");
