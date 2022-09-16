@@ -78,22 +78,36 @@ exports.getOnePost = (req, res) => {
 // Modifie une  Publication
 exports.updatePost = (req, res) => {
     
-        let postId = req.params.id;
+    let postId = req.params.id;
         // Peut être que cette partie la sert à rien
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
         let userId = decodedToken.userId;
         // 
-        if (req.file) {
-            let image = req.file.filename;
-            
-        }
+
         const {user_id, annotation } = req.body;
         const image = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
+
+        let sqlInserts1 = [userId];
+
+    if (req.file == undefined) {
+
+
+        let sqlInserts =  [  annotation, postId, userId];
+
+        postModels.updatePost( sqlInserts , sqlInserts1)
+            .then((response) => {
+                res.status(200).json(JSON.stringify({response}))
+            })
+            .catch( (error) => {
+                res.status(400).json({error})
+            });
+    } else {
+        
         let sqlInserts =  [ image , annotation, postId, userId  ];
         console.log(sqlInserts + "file1");
     
-        postModels.updatePost( sqlInserts)
+        postModels.updatePost( sqlInserts , sqlInserts1)
             .then((response) => {
                 res.status(200).json(JSON.stringify({response}))
             })
@@ -101,42 +115,16 @@ exports.updatePost = (req, res) => {
                 res.status(400).json({error})
             });
             console.log(sqlInserts + "file2");
+    }
 
-        // multerUpload( req, res , function(err){
-           
+        
+        
 
-        //     if (err instanceof multer.MulterError ) {
-        //         res.status(400).json({err})
-        //         console.log(err + "multer");
-        //     } else if (err) {
-        //         res.status(400).json({err})
-        //         console.log(err + "non multer");
-
-        //     }
-        // })
+        
     
         
     
-    // let postId = req.params.id;
-    // // Peut être que cette partie la sert à rien
-    // const token = req.headers.authorization.split(' ')[1];
-    // const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
-    // let userId = decodedToken.userId;
-    // // 
-
-    // const {user_id, annotation } = req.body;
-
-
-    // let sqlInserts =  [  annotation, postId, userId];
-
-    // postModels.updatePost( sqlInserts)
-    //     .then((response) => {
-    //         res.status(200).json(JSON.stringify({response}))
-    //     })
-    //     .catch( (error) => {
-    //         res.status(400).json({error})
-    //     });
-
+    
 
 }
 
