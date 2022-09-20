@@ -17,10 +17,10 @@ let postModels = new PostsModels();
 exports.createPost =  (req, res) => {
 
     const {user_id, user_service, annotation } = req.body;
-    const image = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
-    console.log(image + "contr image");
+    const image_adress = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
+    console.log(image_adress + "contr image");
 
-    let sqlInserts = [ user_id, user_service, image , annotation];
+    let sqlInserts = [ user_id, user_service, image_adress , annotation];
     
     postModels.createPost(sqlInserts)
 
@@ -86,7 +86,7 @@ exports.updatePost = (req, res) => {
         // 
 
         const {user_id, annotation } = req.body;
-        const image = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
+        const image_adress = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
 
         let sqlInserts1 = [userId];
 
@@ -104,7 +104,7 @@ exports.updatePost = (req, res) => {
             });
     } else {
         
-        let sqlInserts =  [ image , annotation, postId, userId  ];
+        let sqlInserts =  [ image_adress , annotation, postId, userId  ];
         console.log(sqlInserts + "file1");
     
         postModels.updatePost( sqlInserts , sqlInserts1)
