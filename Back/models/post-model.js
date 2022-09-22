@@ -7,7 +7,7 @@ const { rejects } = require("assert");
 const jwt = require('jsonwebtoken');
 const path = require("path");
 
-
+// TODO Choisi entre user id avec decodetoken et sans
 // Il faut vérifier que chaque partie marche avec et sans images !!!
 
 class PostsModels{
@@ -143,8 +143,6 @@ class PostsModels{
     // The connect() method accepts a callback function that has the err argument which provides the detailed error if any error occurred.
     // db.query lui va plus lancé une requête avec une commande sql
     updatePost( sqlInserts , sqlInserts1){
-
-        
 
         if (sqlInserts == 4) {
 

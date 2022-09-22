@@ -17,8 +17,10 @@ let postModels = new PostsModels();
 exports.createPost =  (req, res) => {
 
     const {user_id, user_service, annotation } = req.body;
-    const image_adress = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
+    const image_adress = `${req.protocol}//${req.get("host")}/images/${req.file.image_adress}`;
     console.log(image_adress + "contr image");
+    console.log(req.file + 'req.file');
+    // console.log(req.body + 'req.body');
 
     let sqlInserts = [ user_id, user_service, image_adress , annotation];
     
@@ -86,7 +88,7 @@ exports.updatePost = (req, res) => {
         // 
 
         const {user_id, annotation } = req.body;
-        const image_adress = `${req.protocol}//${req.get("host")}/images/${req.file.filename}`;
+        const image_adress = `${req.protocol}//${req.get("host")}/images/${req.file.image_adress}`;
 
         let sqlInserts1 = [userId];
 
@@ -116,16 +118,6 @@ exports.updatePost = (req, res) => {
             });
             console.log(sqlInserts + "file2");
     }
-
-        
-        
-
-        
-    
-        
-    
-    
-
 }
 
 // Supprime une  Publication
