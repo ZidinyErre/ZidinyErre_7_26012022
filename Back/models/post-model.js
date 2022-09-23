@@ -144,57 +144,93 @@ class PostsModels{
     // db.query lui va plus lancé une requête avec une commande sql
     updatePost( sqlInserts , sqlInserts1){
 
-        if (sqlInserts == 4) {
+        return new Promise((resolve, reject) =>{
 
-            console.log(sqlInserts + "début");
-            return new Promise((resolve, reject) =>{
-                let sql = "UPDATE  post   SET  annotation = ? WHERE id = ? AND user_id = ? " ;
-                sql = mysql.format(sql,sqlInserts);
-                db.query(sql, function(err,result){
-                    console.log(sql + "updatemodel");
-                    if (err) return reject({err});
-                    
-                     resolve({message:'Publication sans image modifié' })
-                })
-            })
+            let sql1 = 'SELECT image_adress FROM post WHERE id = ?';
+            sql1 = mysql.format(sql1,sqlInserts);
 
-        } else {
-            return new Promise((resolve, reject) =>{
+            let sql2 = 'DELETE image_adress FROM  post WHERE id = ?';
+            sql2 = mysql.format(sql2,sqlInserts1);
 
-                let sql1 = 'SELECT image_adress FROM post WHERE id = ?';
-                sql1 = mysql.format(sql1,sqlInserts);
-
-                let sql2 = 'DELETE image_adress FROM  post WHERE id = ?';
-                sql2 = mysql.format(sql2,sqlInserts1);
-
-                let sql = 'UPDATE  post   SET  image_adress = ? ,annotation = ? WHERE id = ? AND user_id = ?  ';
-                sql = mysql.format(sql,sqlInserts);
+            let sql = 'UPDATE  post   SET ? WHERE id = ? AND user_id = ?  ';
+            sql = mysql.format(sql,sqlInserts);
 
 
-                db.query(sql1, function(err, result){
-                    const imageName = result[0].image_adress;
-                    console.log(imageName + 'imageName');
+            db.query(sql1, function(err, result){
+                const imageName = result[0].image_adress;
+                console.log(imageName + 'imageName');
 
-                    db.query(sql2, function(err, result){
-                        fs.unlink('./images' + imageName, (err) => {
-                            if (err) {
-                                console.log('suppression de l image sur le serveur à échoué' + err);
-                            } else {
-                                db.query(sql, function(err,result){
-                                    console.log(sql + "updatemodel");
-                                    if (err) return reject({err});
-                                    
-                                    resolve({message:'Publication avec image modifié' + result})
-                                }) 
-                            }
-                        })
+                db.query(sql2, function(err, result){
+                    fs.unlink('./images' + imageName, (err) => {
+                        if (err) {
+                            console.log('suppression de l image sur le serveur à échoué' + err);
+                        } else {
+                            db.query(sql, function(err,result){
+                                console.log(sql + "updatemodel");
+                                if (err) return reject({err});
+                                
+                                resolve({message:'Publication avec image modifié' + result})
+                            }) 
+                        }
                     })
-
                 })
 
-
             })
-        }
+
+
+        })
+
+        // if (sqlInserts == 4) {
+
+        //     console.log(sqlInserts + "début");
+        //     return new Promise((resolve, reject) =>{
+        //         let sql = "UPDATE  post   SET  annotation = ? WHERE id = ? AND user_id = ? " ;
+        //         sql = mysql.format(sql,sqlInserts);
+        //         db.query(sql, function(err,result){
+        //             console.log(sql + "updatemodel");
+        //             if (err) return reject({err});
+                    
+        //              resolve({message:'Publication sans image modifié' })
+        //         })
+        //     })
+
+        // } else {
+        //     return new Promise((resolve, reject) =>{
+
+        //         let sql1 = 'SELECT image_adress FROM post WHERE id = ?';
+        //         sql1 = mysql.format(sql1,sqlInserts);
+
+        //         let sql2 = 'DELETE image_adress FROM  post WHERE id = ?';
+        //         sql2 = mysql.format(sql2,sqlInserts1);
+
+        //         let sql = 'UPDATE  post   SET  image_adress = ? ,annotation = ? WHERE id = ? AND user_id = ?  ';
+        //         sql = mysql.format(sql,sqlInserts);
+
+
+        //         db.query(sql1, function(err, result){
+        //             const imageName = result[0].image_adress;
+        //             console.log(imageName + 'imageName');
+
+        //             db.query(sql2, function(err, result){
+        //                 fs.unlink('./images' + imageName, (err) => {
+        //                     if (err) {
+        //                         console.log('suppression de l image sur le serveur à échoué' + err);
+        //                     } else {
+        //                         db.query(sql, function(err,result){
+        //                             console.log(sql + "updatemodel");
+        //                             if (err) return reject({err});
+                                    
+        //                             resolve({message:'Publication avec image modifié' + result})
+        //                         }) 
+        //                     }
+        //                 })
+        //             })
+
+        //         })
+
+
+        //     })
+        // }
 
         
     }   

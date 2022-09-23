@@ -81,21 +81,20 @@ exports.getOnePost = (req, res) => {
 exports.updatePost = (req, res) => {
     
     let postId = req.params.id;
-        // Peut être que cette partie la sert à rien
+        // Peut être que cette partie la sert à rien, choisi entre les deux user id
         const token = req.headers.authorization.split(' ')[1];
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET );
         let userId = decodedToken.userId;
         // 
 
-        const {user_id, annotation } = req.body;
-        const image_adress = `${req.protocol}//${req.get("host")}/images/${req.file.image_adress}`;
+    const postObject = req.file ? {
+        ...req.body,
+        image_adress : `${req.protocol}//${req.get("host")}/images/${req.file.filename}`
+    } : {...req.body};
+        
 
         let sqlInserts1 = [userId];
-
-    if (req.file == undefined) {
-
-
-        let sqlInserts =  [  annotation, postId, userId];
+        let sqlInserts =  [  postObject, postId];
 
         postModels.updatePost( sqlInserts , sqlInserts1)
             .then((response) => {
@@ -104,20 +103,33 @@ exports.updatePost = (req, res) => {
             .catch( (error) => {
                 res.status(400).json({error})
             });
-    } else {
+
+    // if (req.file == undefined) {
+
+
+    //     let sqlInserts =  [  annotation, postId, userId];
+
+    //     postModels.updatePost( sqlInserts , sqlInserts1)
+    //         .then((response) => {
+    //             res.status(200).json(JSON.stringify({response}))
+    //         })
+    //         .catch( (error) => {
+    //             res.status(400).json({error})
+    //         });
+    // } else {
         
-        let sqlInserts =  [ image_adress , annotation, postId, userId  ];
-        console.log(sqlInserts + "file1");
+    //     let sqlInserts =  [ image_adress , annotation, postId, userId  ];
+    //     console.log(sqlInserts + "file1");
     
-        postModels.updatePost( sqlInserts , sqlInserts1)
-            .then((response) => {
-                res.status(200).json(JSON.stringify({response}))
-            })
-            .catch( (error) => {
-                res.status(400).json({error})
-            });
-            console.log(sqlInserts + "file2");
-    }
+    //     postModels.updatePost( sqlInserts , sqlInserts1)
+    //         .then((response) => {
+    //             res.status(200).json(JSON.stringify({response}))
+    //         })
+    //         .catch( (error) => {
+    //             res.status(400).json({error})
+    //         });
+    //         console.log(sqlInserts + "file2");
+    // }
 }
 
 // Supprime une  Publication
