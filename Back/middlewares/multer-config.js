@@ -2,6 +2,9 @@
 
 const multer = require('multer');
 const path = require('path');
+const express = require('express');
+
+const app = express();
 // Middleware qui va principalement permettre de récupérer et gérer les images
 const MIME_TYPES = {
     'image/jpg': 'jpg',
@@ -28,5 +31,7 @@ const storage = multer.diskStorage({
     
 });
 
+
+
 // module.exports = multer({storage : storage});
-module.exports = multer({storage : storage}).single('image_adress');
+module.exports = multer({storage : storage}).any('image_adress');

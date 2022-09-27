@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 let corsOptions = {
     origin: 'http://localhost:8080/'
 }
-
+const errorField = require('./middlewares/error-field');
 // const { authenticated } = require('./middlewares/auth');
 const app = express();
 
@@ -43,6 +43,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // app.use(express.json());
 
 
+
 app.use('/api/auth', userRoutes);
 app.use('/api/post', postRoutes);
 app.use('/api/comment', commentRoutes);
@@ -52,9 +53,18 @@ app.use('/api/', refreshRoutes);
 
 
 app.use( express.static(path.join(__dirname, 'images')));
+
+app.use(errorField);
+
 // app.use(express.static('images'));
  
 // app.use(morgan('dev'));
 
+// app.use((error, req, res, next) =>{
+//     const message = `This is the rejected field ->'${error.field}'`;
+//     console.log(message);
+//     next()
+//     return res.status(500).send(message);
+// });
 
 module.exports = app;

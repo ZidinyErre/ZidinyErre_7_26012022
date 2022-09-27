@@ -91,7 +91,8 @@ exports.updatePost = (req, res) => {
         ...req.body,
         image_adress : `${req.protocol}//${req.get("host")}/images/${req.file.filename}`
     } : {...req.body};
-        
+    console.log( bidule + '' + 'filename');
+
 
         let sqlInserts1 = [userId];
         let sqlInserts =  [  postObject, postId];
