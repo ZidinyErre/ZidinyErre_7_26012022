@@ -142,7 +142,7 @@ class PostsModels{
 
     // The connect() method accepts a callback function that has the err argument which provides the detailed error if any error occurred.
     // db.query lui va plus lancé une requête avec une commande sql
-    updatePost( sqlInserts , sqlInserts1){
+    updatePost( sqlInserts , sqlInserts1, sqlInserts2){
 
         return new Promise((resolve, reject) =>{
 
@@ -152,9 +152,11 @@ class PostsModels{
             let sql2 = 'DELETE image_adress FROM  post WHERE id = ?';
             sql2 = mysql.format(sql2,sqlInserts1);
 
-            let sql = 'UPDATE  post   SET ? WHERE id = ? AND user_id = ?  ';
+            let sql = 'UPDATE  post   SET annotation = ? , image_adress = ?  WHERE id = ? AND user_id = ?  ';
             sql = mysql.format(sql,sqlInserts);
 
+            let sql3 = 'UPDATE  post   SET annotation = ?  WHERE id = ? AND user_id = ?  ';
+            sql3 = mysql.format(sql,sqlInserts2);
 
             db.query(sql1, function(err, result){
                 const imageName = result[0].image_adress;
@@ -179,6 +181,48 @@ class PostsModels{
 
 
         })
+
+        //     db.query(sql3, function(err,result){
+        //         console.log(sql3 + "updatemodelsansimage");
+        //         if (err) return reject({err});
+                
+        //         resolve({message:'Publication sans image modifié' + result})
+        //     })
+
+        //     if (sqlInserts == 3) {
+        //         db.query(sql3, function(err,result){
+        //             console.log(sql3 + "updatemodelsansimage");
+        //             if (err) return reject({err});
+                    
+        //             resolve({message:'Publication avec image modifié' + result})
+        //         }) 
+        //     } else {
+        //         db.query(sql1, function(err, result){
+        //             const imageName = result[0].image_adress;
+        //             console.log(imageName + 'imageName');
+    
+        //             db.query(sql2, function(err, result){
+        //                 fs.unlink('./images' + imageName, (err) => {
+        //                     if (err) {
+        //                         console.log('suppression de l image sur le serveur à échoué' + err);
+        //                     } else {
+        //                         db.query(sql, function(err,result){
+        //                             console.log(sql + "updatemodel");
+        //                             if (err) return reject({err});
+                                    
+        //                             resolve({message:'Publication avec image modifié' + result})
+        //                         }) 
+        //                     }
+        //                 })
+        //             })
+    
+        //         }) 
+        //     }
+
+            
+
+
+        // })
 
         // if (sqlInserts == 4) {
 

@@ -17,12 +17,13 @@ let postModels = new PostsModels();
 exports.createPost =  (req, res) => {
 
     const {user_id, user_service, annotation } = req.body;
-    const image_adress = `${req.protocol}//${req.get("host")}/images/${req.file.image_adress}`;
+    const image_adress = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
     console.log(image_adress + "contr image");
     console.log(req.file + 'req.file');
     // console.log(req.body + 'req.body');
 
     let sqlInserts = [ user_id, user_service, image_adress , annotation];
+
     
     postModels.createPost(sqlInserts)
 
@@ -79,7 +80,7 @@ exports.getOnePost = (req, res) => {
 
 // Modifie une  Publication
 exports.updatePost = (req, res) => {
-    
+    console.log(req.file);
     let postId = req.params.id;
         // Peut être que cette partie la sert à rien, choisi entre les deux user id
         const token = req.headers.authorization.split(' ')[1];
@@ -87,22 +88,24 @@ exports.updatePost = (req, res) => {
         let userId = decodedToken.userId;
         // 
 
-    const postObject = req.file ? {
-        ...req.body,
-        image_adress : `${req.protocol}//${req.get("host")}/images/${req.file.filename}`
-    } : {...req.body};
-    console.log( bidule + '' + 'filename');
+        const { annotation } = req.body;
+        const image_adress = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+        console.log(image_adress + "contr update image");
 
 
         let sqlInserts1 = [userId];
-        let sqlInserts =  [  postObject, postId];
+        let sqlInserts =  [ annotation, image_adress, postId, userId];
+        let sqlInserts2 =  [ annotation, postId, userId];
 
-        postModels.updatePost( sqlInserts , sqlInserts1)
+
+        postModels.updatePost( sqlInserts , sqlInserts1, sqlInserts2)
             .then((response) => {
                 res.status(200).json(JSON.stringify({response}))
             })
             .catch( (error) => {
+                if (error instanceof multer.MulterError) {
                 res.status(400).json({error})
+                }
             });
 
     // if (req.file == undefined) {
